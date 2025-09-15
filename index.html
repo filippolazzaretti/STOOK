@@ -25,6 +25,7 @@ h1{
   font-weight:400; text-transform:uppercase;
   line-height:1; text-align:center;
   font-family:'Luckiest Guy', cursive; color:var(--text);
+  cursor:pointer;
 }
 
 /* Profilo utente */
@@ -57,16 +58,17 @@ h1{
   font-weight:400;
   font-size:clamp(1.25rem, 3vw, 2rem);
   margin:1rem 0 .5rem .5rem;
+  cursor:pointer;
 }
 
 /* Distanza extra tra le due sezioni */
 section + section {
-  margin-top: 2rem; /* spazio verticale */
+  margin-top: 2rem;
 }
 
-/* Riga 5 card */
+/* Riga card */
 .row-5{
-  display:flex; justify-content:space-between; gap:var(--gap);
+  display:flex; flex-wrap:wrap; gap:var(--gap);
   width:100%; padding:0 .5rem;
 }
 .card{
@@ -76,8 +78,13 @@ section + section {
   background:#fff;
   padding:8px;
   display:flex; flex-direction:column; gap:.4rem;
-  aspect-ratio:3/4;   /* proporzione base */
-  max-height:220px;   /* limite massimo altezza */
+  aspect-ratio:3/4;
+  max-height:220px;
+  cursor:pointer;
+  transition:transform .15s ease;
+}
+.card:hover{
+  transform:scale(1.02);
 }
 .card-thumb{
   flex:1;
@@ -87,6 +94,14 @@ section + section {
   font-size:.85rem; color:#666;
 }
 .card-title{ font-weight:600; font-size:.9rem; }
+
+/* --- Responsive --- */
+@media (max-width: 1000px){
+  .card{ flex:0 0 calc((100% - (var(--gap)*2) - 1rem) / 3); }
+}
+@media (max-width: 600px){
+  .card{ flex:0 0 calc((100% - (var(--gap)*1) - 1rem) / 2); }
+}
 </style>
 </head>
 <body>
@@ -101,30 +116,30 @@ section + section {
 </div>
 
 <!-- Titolo unico -->
-<h1>STOOK</h1>
+<h1 onclick="window.open('home.html','_blank')">STOOK</h1>
 
 <main class="main">
   <!-- Libri -->
   <section>
-    <h2 class="section-title">Libri</h2>
+    <h2 class="section-title" onclick="window.open('libri.html','_blank')">Libri</h2>
     <div class="row-5">
-      <div class="card"><div class="card-thumb">Copertina</div><div class="card-title">Libro 1</div></div>
-      <div class="card"><div class="card-thumb">Copertina</div><div class="card-title">Libro 2</div></div>
-      <div class="card"><div class="card-thumb">Copertina</div><div class="card-title">Libro 3</div></div>
-      <div class="card"><div class="card-thumb">Copertina</div><div class="card-title">Libro 4</div></div>
-      <div class="card"><div class="card-thumb">Copertina</div><div class="card-title">Libro 5</div></div>
+      <div class="card" onclick="window.open('libro1.html','_blank')"><div class="card-thumb">Copertina</div><div class="card-title">Libro 1</div></div>
+      <div class="card" onclick="window.open('libro2.html','_blank')"><div class="card-thumb">Copertina</div><div class="card-title">Libro 2</div></div>
+      <div class="card" onclick="window.open('libro3.html','_blank')"><div class="card-thumb">Copertina</div><div class="card-title">Libro 3</div></div>
+      <div class="card" onclick="window.open('libro4.html','_blank')"><div class="card-thumb">Copertina</div><div class="card-title">Libro 4</div></div>
+      <div class="card" onclick="window.open('libro5.html','_blank')"><div class="card-thumb">Copertina</div><div class="card-title">Libro 5</div></div>
     </div>
   </section>
 
   <!-- Appunti -->
   <section>
-    <h2 class="section-title">Appunti</h2>
+    <h2 class="section-title" onclick="window.open('appunti.html','_blank')">Appunti</h2>
     <div class="row-5">
-      <div class="card"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 1</div></div>
-      <div class="card"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 2</div></div>
-      <div class="card"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 3</div></div>
-      <div class="card"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 4</div></div>
-      <div class="card"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 5</div></div>
+      <div class="card" onclick="window.open('appunto1.html','_blank')"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 1</div></div>
+      <div class="card" onclick="window.open('appunto2.html','_blank')"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 2</div></div>
+      <div class="card" onclick="window.open('appunto3.html','_blank')"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 3</div></div>
+      <div class="card" onclick="window.open('appunto4.html','_blank')"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 4</div></div>
+      <div class="card" onclick="window.open('appunto5.html','_blank')"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 5</div></div>
     </div>
   </section>
 </main>
