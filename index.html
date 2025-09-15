@@ -93,7 +93,7 @@ h1{
 /* Distanza extra tra sezioni */
 section + section { margin-top: 2rem; }
 
-/* Riga card */
+/* Riquadri */
 .row-5{
   display:flex; flex-wrap:wrap; gap:var(--gap);
   width:100%; padding:0 .5rem;
@@ -115,6 +115,17 @@ section + section { margin-top: 2rem; }
 }
 .card:hover{ transform:scale(1.02); }
 .card-title{ font-weight:600; font-size:.95rem; }
+
+/* Riquadro speciale "Gli altri atenei" */
+.card-others{
+  border:3px solid #000; /* bordo più spesso e nero */
+}
+.card-others .card-title{
+  font-family:'Luckiest Guy', cursive;  /* stesso font di STOOK */
+  font-weight:400;
+  font-size:1rem;
+  text-transform:uppercase;
+}
 
 /* Responsive */
 @media (max-width: 1000px){
@@ -188,7 +199,7 @@ function renderCards(sectionId, items, searchPage){
 
   // quinto riquadro "Gli altri atenei"
   const altri = document.createElement("div");
-  altri.className = "card";
+  altri.className = "card card-others";
   altri.innerHTML = `<div class="card-title">Gli altri atenei</div>`;
   altri.onclick = () => window.open(searchPage,"_blank");
   container.appendChild(altri);
