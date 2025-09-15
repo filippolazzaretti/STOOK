@@ -145,33 +145,30 @@ window.addEventListener("click", function(e) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>STOOK</title>
-<meta name="description" content="STOOK — bacheca per scambio di libri e appunti universitari">
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#ffffff; --text:#000000;
-  --gap:8px;           /* spazio tra le card */
-  --container-pad:6px; /* margini laterali ridotti */
+  --gap:8px; /* spazio tra card */
   --card-radius:12px; --card-border:#e5e5e5;
 }
-*{box-sizing:border-box}
-html,body{height:100%;margin:0}
+*{box-sizing:border-box;margin:0;padding:0}
 body{
-  display:flex; flex-direction:column; align-items:center;
   background:var(--bg); color:var(--text);
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  display:flex; flex-direction:column; align-items:center;
 }
 
-/* Titolo principale */
+/* Titolo unico */
 h1{
-  margin:1.2rem 0 1rem;
+  margin:1rem 0;
   font-size:clamp(2.5rem,8vw,6rem);
   font-weight:400; text-transform:uppercase;
   line-height:1; text-align:center;
   font-family:'Luckiest Guy', cursive; color:var(--text);
 }
 
-/* Profilo utente (angolo in alto a destra) */
+/* Profilo utente */
 .profile{
   position:fixed; top:1rem; right:1rem;
   display:flex; flex-direction:column; align-items:center; font-size:.9rem;
@@ -186,55 +183,45 @@ h1{
 /* Dropdown profilo */
 .dropdown{
   display:none; position:absolute; top:4.5rem; right:1rem; background:#fff;
-  border:1px solid #ccc; border-radius:8px; padding:1rem; min-width:200px; max-width:260px;
-  box-shadow:0 2px 6px rgba(0,0,0,.15); text-align:left;
+  border:1px solid #ccc; border-radius:8px; padding:1rem; min-width:200px;
+  box-shadow:0 2px 6px rgba(0,0,0,.15);
 }
 .dropdown-content h2{ margin:0 0 1rem; font-size:1.1rem }
 
-/* ---- Layout Home / Bacheche ---- */
-.main{
-  width:100%; max-width:1200px; padding:0 var(--container-pad) 3rem;
-}
+/* Sezioni bacheca */
+.main{ width:100%; }
 
-/* Titoli sezione (stesso font di STOOK, più piccoli) */
+/* Titoli sezione */
 .section-title{
   font-family:'Luckiest Guy', cursive;
   text-transform:uppercase;
   font-weight:400;
-  font-size:clamp(1.25rem, 3.2vw, 2rem);
-  margin:1.25rem 0 .75rem;
+  font-size:clamp(1.25rem, 3vw, 2rem);
+  margin:1rem 0 .5rem .5rem;
 }
 
-/* Riga da 5 card affiancate */
+/* Riga 5 card */
 .row-5{
-  display:flex; align-items:stretch; justify-content:space-between;
-  gap:var(--gap);
-  overflow:hidden;
+  display:flex; justify-content:space-between; gap:var(--gap);
+  width:100%; padding:0 .5rem;
 }
-
-/* Calcolo larghezza 5 card */
 .card{
-  flex:0 0 calc((100vw - (var(--container-pad)*2) - (var(--gap)*4)) / 5);
+  flex:0 0 calc((100% - (var(--gap)*4) - 1rem) / 5);
   border:1px solid var(--card-border);
   border-radius:var(--card-radius);
   background:#fff;
-  padding:10px;
-  display:flex; flex-direction:column; gap:.5rem;
-  aspect-ratio: 3 / 4; /* altezza proporzionata */
+  padding:8px;
+  display:flex; flex-direction:column; gap:.4rem;
+  aspect-ratio:3/5; /* più basso per far entrare le due sezioni */
 }
-
-/* Placeholder contenuto card */
 .card-thumb{
   flex:1;
-  border-radius:10px;
+  border-radius:8px;
   border:1px dashed #cfcfcf;
   display:flex; align-items:center; justify-content:center;
-  font-size:.9rem; color:#666;
+  font-size:.85rem; color:#666;
 }
-.card-title{ font-weight:600; font-size:.95rem; line-height:1.2 }
-.card-meta{ font-size:.8rem; color:#555 }
-
-:focus-visible{ outline:3px solid #000; outline-offset:4px }
+.card-title{ font-weight:600; font-size:.9rem; }
 </style>
 </head>
 <body>
@@ -244,54 +231,49 @@ h1{
   <div class="profile-pic">AB</div>
   <a href="#" class="username" id="openProfile">@andrea92</a>
 </div>
-
-<!-- Riquadro profilo -->
 <div class="dropdown" id="profileDropdown">
-  <div class="dropdown-content">
-    <h2><strong>Ciao @andrea92</strong></h2>
-  </div>
+  <div class="dropdown-content"><h2><strong>Ciao @andrea92</strong></h2></div>
 </div>
 
 <!-- Titolo unico -->
-<h1 aria-label="STOOK">STOOK</h1>
+<h1>STOOK</h1>
 
-<main class="main" aria-label="Bacheche STOOK">
-  <!-- Sezione Libri -->
-  <section aria-labelledby="sec-libri">
-    <h2 id="sec-libri" class="section-title">Libri</h2>
+<main class="main">
+  <!-- Libri -->
+  <section>
+    <h2 class="section-title">Libri</h2>
     <div class="row-5">
-      <article class="card"><div class="card-thumb">Copertina</div><div class="card-title">Libro 1</div></article>
-      <article class="card"><div class="card-thumb">Copertina</div><div class="card-title">Libro 2</div></article>
-      <article class="card"><div class="card-thumb">Copertina</div><div class="card-title">Libro 3</div></article>
-      <article class="card"><div class="card-thumb">Copertina</div><div class="card-title">Libro 4</div></article>
-      <article class="card"><div class="card-thumb">Copertina</div><div class="card-title">Libro 5</div></article>
+      <div class="card"><div class="card-thumb">Copertina</div><div class="card-title">Libro 1</div></div>
+      <div class="card"><div class="card-thumb">Copertina</div><div class="card-title">Libro 2</div></div>
+      <div class="card"><div class="card-thumb">Copertina</div><div class="card-title">Libro 3</div></div>
+      <div class="card"><div class="card-thumb">Copertina</div><div class="card-title">Libro 4</div></div>
+      <div class="card"><div class="card-thumb">Copertina</div><div class="card-title">Libro 5</div></div>
     </div>
   </section>
 
-  <!-- Sezione Appunti -->
-  <section aria-labelledby="sec-appunti">
-    <h2 id="sec-appunti" class="section-title">Appunti</h2>
+  <!-- Appunti -->
+  <section>
+    <h2 class="section-title">Appunti</h2>
     <div class="row-5">
-      <article class="card"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 1</div></article>
-      <article class="card"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 2</div></article>
-      <article class="card"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 3</div></article>
-      <article class="card"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 4</div></article>
-      <article class="card"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 5</div></article>
+      <div class="card"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 1</div></div>
+      <div class="card"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 2</div></div>
+      <div class="card"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 3</div></div>
+      <div class="card"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 4</div></div>
+      <div class="card"><div class="card-thumb">Anteprima</div><div class="card-title">Appunto 5</div></div>
     </div>
   </section>
 </main>
 
 <script>
-const openBtn = document.getElementById("openProfile");
-const dropdown = document.getElementById("profileDropdown");
-
-openBtn.addEventListener("click", function(e){
+const openBtn=document.getElementById("openProfile");
+const dropdown=document.getElementById("profileDropdown");
+openBtn.addEventListener("click",e=>{
   e.preventDefault();
-  dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+  dropdown.style.display=(dropdown.style.display==="block")?"none":"block";
 });
-window.addEventListener("click", function(e){
-  if (!dropdown.contains(e.target) && !openBtn.contains(e.target)) {
-    dropdown.style.display = "none";
+window.addEventListener("click",e=>{
+  if(!dropdown.contains(e.target)&&!openBtn.contains(e.target)){
+    dropdown.style.display="none";
   }
 });
 </script>
