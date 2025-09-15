@@ -87,3 +87,70 @@ color: var(--text);
   text-decoration: underline;
 }
 </style>
+<!-- Profilo utente -->
+<div class="profile">
+  <div class="profile-pic">AB</div>
+  <a href="#" class="username" id="openProfile">@andrea92</a>
+</div>
+
+<!-- Riquadro nascosto -->
+<div class="modal" id="profileModal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <h2>Ciao @andrea92</h2>
+  </div>
+</div>
+
+<style>
+/* --- Modal --- */
+.modal {
+  display: none; /* nascosto di default */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4); /* overlay scuro trasparente */
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  min-width: 250px;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+</style>
+
+<script>
+const openBtn = document.getElementById("openProfile");
+const modal = document.getElementById("profileModal");
+const closeBtn = document.getElementById("closeModal");
+
+openBtn.addEventListener("click", function(e) {
+  e.preventDefault();
+  modal.style.display = "flex";
+});
+
+closeBtn.addEventListener("click", function() {
+  modal.style.display = "none";
+});
+
+window.addEventListener("click", function(e) {
+  if (e.target === modal) {
+    modal.style.display = "none";
+  }
+});
+</script>
