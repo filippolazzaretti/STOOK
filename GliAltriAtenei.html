@@ -11,8 +11,9 @@
 body{
   background:var(--bg); color:var(--text);
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-  display:flex; flex-direction:column; align-items:center; min-height:100vh;
+  display:flex; flex-direction:column; min-height:100vh;
 }
+
 /* Titolo */
 h1{
   margin:1rem 0;
@@ -21,6 +22,7 @@ h1{
   line-height:1; text-align:center;
   font-family:'Luckiest Guy', cursive; color:var(--text);
 }
+
 /* Profilo */
 .profile{ position:fixed; top:1rem; right:1rem; display:flex; flex-direction:column; align-items:center; font-size:.9rem; }
 .profile-pic{ width:48px;height:48px;border-radius:50%;background:#ddd;display:flex;align-items:center;justify-content:center;font-weight:700;color:#000; }
@@ -28,6 +30,7 @@ h1{
 .username:hover{text-decoration:underline}
 .dropdown{ display:none; position:absolute; top:4.5rem; right:1rem; background:#fff; border:1px solid #ccc; border-radius:8px; padding:1rem; min-width:200px; box-shadow:0 2px 6px rgba(0,0,0,.15);}
 .dropdown-content h2{ margin:0 0 1rem; font-size:1.1rem }
+
 /* Sidebar */
 .menu-btn{ position:fixed; top:1rem; left:1rem; cursor:pointer; background:transparent; border:none; z-index:1001; display:flex; flex-direction:column; gap:5px;}
 .menu-btn span{ display:block; width:25px; height:3px; background:#000; border-radius:2px; transition:all 0.3s ease; }
@@ -38,10 +41,15 @@ h1{
 .overlay.show{ display:block; }
 .sidebar h2{ font-family:'Luckiest Guy', cursive; font-size:1.5rem; margin-bottom:1rem; }
 .sidebar a{ display:block; margin:.5rem 0; text-decoration:none; color:#000; }
+
 /* Contenuto centrale */
 .main-content{ 
-  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; 
-  text-align:center; padding:2rem 1rem;
+  flex:1;
+  display:flex; 
+  flex-direction:column; 
+  align-items:center; 
+  justify-content:center; 
+  text-align:center;
 }
 .main-content p{ 
   font-size:1.5rem; 
@@ -62,6 +70,7 @@ h1{
   outline:none; 
   font-size:1.5rem; 
   padding:0 .5rem;
+  text-align:center;
 }
 .search-box button{ 
   border:none; 
