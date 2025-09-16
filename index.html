@@ -50,9 +50,9 @@ h1{
 /* Sezioni bacheca */
 .main{ width:100%; }
 
-/* Titoli sezione + barra ricerca */
+/* Titoli sezione */
 .section-header{
-  display:flex; align-items:center; justify-content:flex-start; gap:1rem;
+  display:flex; align-items:center; justify-content:flex-start;
   margin:1rem 0 .5rem 1rem;
 }
 .section-title{
@@ -61,41 +61,6 @@ h1{
   font-weight:400;
   font-size:clamp(1.25rem, 3vw, 2rem);
   margin:0;
-}
-
-/* Sottotitolo */
-.subtitle{
-  margin-left:1rem;
-  margin-bottom:.5rem;
-  font-size:.95rem;
-  font-weight:500;
-}
-
-/* Barra ricerca */
-.search-box{
-  display:flex; align-items:center;
-  background:#fff;
-  padding:0 .3rem;
-  height:2rem;
-  width:260px;
-}
-.search-box input{
-  flex:1;
-  border:none;
-  background:transparent;
-  outline:none;
-  font-size:.9rem;
-  padding:0 .4rem;
-}
-.search-box button{
-  border:none;
-  background:transparent;
-  font-size:1.2rem;
-  cursor:pointer;
-  transition:transform .15s ease;
-}
-.search-box button:hover{
-  transform:scale(1.15);
 }
 
 /* Distanza extra tra sezioni */
@@ -206,9 +171,9 @@ section + section { margin-top: 2rem; }
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
   <h2>Menu</h2>
-  <a href="index.html">Home</a>
-  <a href="ricerca-libri.html">Libri</a>
-  <a href="ricerca-appunti.html">Appunti</a>
+  <a href="#">Home</a>
+  <a href="#">Libri</a>
+  <a href="#">Appunti</a>
   <a href="#">Profilo</a>
 </div>
 <div class="overlay" id="overlay"></div>
@@ -230,12 +195,7 @@ section + section { margin-top: 2rem; }
   <section>
     <div class="section-header">
       <h2 class="section-title">Libri</h2>
-      <form class="search-box" onsubmit="event.preventDefault(); window.open('ricerca-libri.html','_blank')">
-        <input type="text" placeholder="Cerca qui il tuo ateneo">
-        <button type="submit">📚</button>
-      </form>
     </div>
-    <p class="subtitle">Gli atenei più cercati:</p>
     <div class="row-5" id="libri-cards"></div>
   </section>
 
@@ -243,12 +203,7 @@ section + section { margin-top: 2rem; }
   <section>
     <div class="section-header">
       <h2 class="section-title">Appunti</h2>
-      <form class="search-box" onsubmit="event.preventDefault(); window.open('ricerca-appunti.html','_blank')">
-        <input type="text" placeholder="Cerca qui il tuo ateneo">
-        <button type="submit">📝</button>
-      </form>
     </div>
-    <p class="subtitle">Gli atenei più cercati:</p>
     <div class="row-5" id="appunti-cards"></div>
   </section>
 </main>
@@ -276,12 +231,12 @@ function renderCards(sectionId, items, searchPage){
   const altri = document.createElement("div");
   altri.className = "card card-others";
   altri.innerHTML = `<div class="card-title">Gli altri atenei</div>`;
-  altri.onclick = () => window.location.href = searchPage;
+  altri.onclick = () => window.open(searchPage,"_blank");
   container.appendChild(altri);
 }
 
-renderCards("libri-cards", topAtenei.libri, "GliAltriAtenei.html");
-renderCards("appunti-cards", topAtenei.appunti, "GliAltriAteneiAppunti.html");
+renderCards("libri-cards", topAtenei.libri, "ricerca-libri.html");
+renderCards("appunti-cards", topAtenei.appunti, "ricerca-appunti.html");
 
 /* Dropdown profilo */
 const openBtn=document.getElementById("openProfile");
