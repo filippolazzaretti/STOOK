@@ -52,7 +52,7 @@ h1{
 
 /* Titoli sezione */
 .section-header{
-  display:flex; align-items:center; justify-content:flex-start;
+  display:flex; flex-direction:column; align-items:flex-start;
   margin:1rem 0 .5rem 1rem;
 }
 .section-title{
@@ -61,6 +61,12 @@ h1{
   font-weight:400;
   font-size:clamp(1.25rem, 3vw, 2rem);
   margin:0;
+}
+.section-subtitle{
+  margin-top:.3rem;
+  font-size:.95rem;
+  font-style:italic;
+  color:#444;
 }
 
 /* Distanza extra tra sezioni */
@@ -195,6 +201,7 @@ section + section { margin-top: 2rem; }
   <section>
     <div class="section-header">
       <h2 class="section-title">Libri</h2>
+      <p class="section-subtitle">Gli atenei più cercati:</p>
     </div>
     <div class="row-5" id="libri-cards"></div>
   </section>
@@ -203,6 +210,7 @@ section + section { margin-top: 2rem; }
   <section>
     <div class="section-header">
       <h2 class="section-title">Appunti</h2>
+      <p class="section-subtitle">Gli atenei più cercati:</p>
     </div>
     <div class="row-5" id="appunti-cards"></div>
   </section>
@@ -231,12 +239,12 @@ function renderCards(sectionId, items, searchPage){
   const altri = document.createElement("div");
   altri.className = "card card-others";
   altri.innerHTML = `<div class="card-title">Gli altri atenei</div>`;
-  altri.onclick = () => window.open(searchPage,"_blank");
+  altri.onclick = () => window.location.href = searchPage;
   container.appendChild(altri);
 }
 
-renderCards("libri-cards", topAtenei.libri, "ricerca-libri.html");
-renderCards("appunti-cards", topAtenei.appunti, "ricerca-appunti.html");
+renderCards("libri-cards", topAtenei.libri, "GliAltriAtenei.html");
+renderCards("appunti-cards", topAtenei.appunti, "GliAltriAteneiAppunti.html");
 
 /* Dropdown profilo */
 const openBtn=document.getElementById("openProfile");
@@ -259,13 +267,13 @@ const overlay=document.getElementById("overlay");
 menuBtn.addEventListener("click",()=>{
   sidebar.classList.add("open");
   overlay.classList.add("show");
-  menuBtn.classList.add("hidden"); // nascondi hamburger
+  menuBtn.classList.add("hidden");
 });
 
 overlay.addEventListener("click",()=>{
   sidebar.classList.remove("open");
   overlay.classList.remove("show");
-  menuBtn.classList.remove("hidden"); // ri-mostra hamburger
+  menuBtn.classList.remove("hidden");
 });
 </script>
 
