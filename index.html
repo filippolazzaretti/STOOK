@@ -44,6 +44,8 @@ section + section { margin-top: 2rem; }
 .card-placeholder{ background:#f9f9f9; color:#aaa; font-style:italic; cursor:default; }
 @media (max-width: 1000px){ .card{ flex:0 0 calc((100% - (var(--gap)*2) - 1rem) / 3); } }
 @media (max-width: 600px){ .card{ flex:0 0 calc((100% - (var(--gap)*1) - 1rem) / 2); } }
+
+/* Hamburger menu */
 .menu-btn{ position:fixed; top:1rem; left:1rem; cursor:pointer; background:transparent; border:none; z-index:1001; display:flex; flex-direction:column; gap:5px; }
 .menu-btn span{ display:block; width:25px; height:3px; background:#000; border-radius:2px; transition:all 0.3s ease; }
 .menu-btn.hidden{ display:none; }
@@ -57,7 +59,10 @@ section + section { margin-top: 2rem; }
 </head>
 <body>
 
+<!-- Bottone hamburger -->
 <button class="menu-btn" id="menuBtn"><span></span><span></span><span></span></button>
+
+<!-- Sidebar -->
 <div class="sidebar" id="sidebar">
   <h2>Menu</h2>
   <a href="index.html">Home</a>
@@ -67,22 +72,36 @@ section + section { margin-top: 2rem; }
 </div>
 <div class="overlay" id="overlay"></div>
 
-<div class="profile"><div class="profile-pic">AB</div><a href="#" class="username" id="openProfile">@andrea92</a></div>
-<div class="dropdown" id="profileDropdown"><div class="dropdown-content"><h2><strong>Ciao @andrea92</strong></h2></div></div>
+<!-- Profilo utente -->
+<div class="profile">
+  <div class="profile-pic">AB</div>
+  <a href="#" class="username" id="openProfile">@andrea92</a>
+</div>
+<div class="dropdown" id="profileDropdown">
+  <div class="dropdown-content"><h2><strong>Ciao @andrea92</strong></h2></div>
+</div>
 
+<!-- Titolo -->
 <h1>STOOK</h1>
 
 <main class="main">
   <section>
-    <div class="section-header"><h2 class="section-title">Libri</h2><p class="section-subtitle">Gli atenei più cercati:</p></div>
+    <div class="section-header">
+      <h2 class="section-title">Libri</h2>
+      <p class="section-subtitle">Gli atenei più cercati:</p>
+    </div>
     <div class="row-5" id="libri-cards"></div>
   </section>
   <section>
-    <div class="section-header"><h2 class="section-title">Appunti</h2><p class="section-subtitle">Gli atenei più cercati:</p></div>
+    <div class="section-header">
+      <h2 class="section-title">Appunti</h2>
+      <p class="section-subtitle">Gli atenei più cercati:</p>
+    </div>
     <div class="row-5" id="appunti-cards"></div>
   </section>
 </main>
 
+<!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL = "INSERISCI_QUI_PROJECT_URL";
@@ -100,7 +119,7 @@ async function renderCards(sectionId, tipo, searchPage){
     .order("clicks", { ascending: false })
     .limit(4);
 
-  if(error || !data) data = [];
+  if (error || !data) data = [];
 
   // Genera 4 card
   for (let i = 0; i < 4; i++) {
@@ -121,7 +140,7 @@ async function renderCards(sectionId, tipo, searchPage){
     container.appendChild(div);
   }
 
-  // Quinta card
+  // Quinta card "Gli altri atenei"
   const altri = document.createElement("div");
   altri.className = "card card-others";
   altri.innerHTML = `<div class="card-title">Gli altri atenei</div>`;
@@ -138,7 +157,9 @@ const dropdown=document.getElementById("profileDropdown");
 openBtn.addEventListener("click",e=>{ e.preventDefault(); dropdown.style.display=(dropdown.style.display==="block")?"none":"block"; });
 window.addEventListener("click",e=>{ if(!dropdown.contains(e.target)&&!openBtn.contains(e.target)){ dropdown.style.display="none"; }});
 // Sidebar
-const menuBtn=document.getElementById("menuBtn"), sidebar=document.getElementById("sidebar"), overlay=document.getElementById("overlay");
+const menuBtn=document.getElementById("menuBtn");
+const sidebar=document.getElementById("sidebar");
+const overlay=document.getElementById("overlay");
 menuBtn.addEventListener("click",()=>{ sidebar.classList.add("open"); overlay.classList.add("show"); menuBtn.classList.add("hidden"); });
 overlay.addEventListener("click",()=>{ sidebar.classList.remove("open"); overlay.classList.remove("show"); menuBtn.classList.remove("hidden"); });
 </script>
