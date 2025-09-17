@@ -14,25 +14,13 @@ body{
   min-height:100vh;
   position:relative;
 }
-
-/* Titolo */
-h1{
-  margin:1rem 0;
-  font-size:clamp(2.5rem,8vw,6rem);
-  font-weight:400; text-transform:uppercase;
-  line-height:1; text-align:center;
-  font-family:'Luckiest Guy', cursive; color:var(--text);
-}
-
-/* Profilo */
+h1{ margin:1rem 0; font-size:clamp(2.5rem,8vw,6rem); font-weight:400; text-transform:uppercase; line-height:1; text-align:center; font-family:'Luckiest Guy', cursive; color:var(--text);}
 .profile{ position:fixed; top:1rem; right:1rem; display:flex; flex-direction:column; align-items:center; font-size:.9rem; }
 .profile-pic{ width:48px;height:48px;border-radius:50%;background:#ddd;display:flex;align-items:center;justify-content:center;font-weight:700;color:#000; }
 .username{ margin-top:.25rem; text-decoration:none; color:inherit; font-weight:500; }
 .username:hover{text-decoration:underline}
 .dropdown{ display:none; position:absolute; top:4.5rem; right:1rem; background:#fff; border:1px solid #ccc; border-radius:8px; padding:1rem; min-width:200px; box-shadow:0 2px 6px rgba(0,0,0,.15);}
 .dropdown-content h2{ margin:0 0 1rem; font-size:1.1rem }
-
-/* Sidebar */
 .menu-btn{ position:fixed; top:1rem; left:1rem; cursor:pointer; background:transparent; border:none; z-index:1001; display:flex; flex-direction:column; gap:5px;}
 .menu-btn span{ display:block; width:25px; height:3px; background:#000; border-radius:2px; transition:all 0.3s ease; }
 .menu-btn.hidden{ display:none; }
@@ -42,45 +30,18 @@ h1{
 .overlay.show{ display:block; }
 .sidebar h2{ font-family:'Luckiest Guy', cursive; font-size:1.5rem; margin-bottom:1rem; }
 .sidebar a{ display:block; margin:.5rem 0; text-decoration:none; color:#000; }
-
-/* Frase e barra */
-.main-text{
-  position:absolute;
-  top:calc(50% - 3.5rem);
-  left:50%;
-  transform:translateX(-50%);
-  font-size:1.5rem;
-  font-weight:600;
-  text-align:center;
-}
-.search-box{ 
-  position:absolute;
-  top:50%; left:50%;
-  transform:translate(-50%, -50%);
-  display:flex; align-items:center; 
-  background:transparent;
-  height:3rem; width:320px; 
-}
-.search-box input{ 
-  flex:1; border:none; background:transparent; outline:none; 
-  font-size:1.5rem; padding:0 .5rem;
-  text-align:left;
-}
-.search-box button{ 
-  border:none; background:transparent; font-size:1.5rem; cursor:pointer; 
-  transition:transform .15s ease; 
-}
+.main-text{ position:absolute; top:calc(50% - 3.5rem); left:50%; transform:translateX(-50%); font-size:1.5rem; font-weight:600; text-align:center; }
+.search-box{ position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); display:flex; align-items:center; background:transparent; height:3rem; width:320px; }
+.search-box input{ flex:1; border:none; background:transparent; outline:none; font-size:1.5rem; padding:0 .5rem; text-align:left;}
+.search-box button{ border:none; background:transparent; font-size:1.5rem; cursor:pointer; transition:transform .15s ease; }
 .search-box button:hover{ transform:scale(1.15); }
+.result{ position:absolute; top:60%; left:50%; transform:translateX(-50%); margin-top:1rem; font-size:1.2rem; font-weight:500; }
 </style>
 </head>
 <body>
 
-<!-- Bottone hamburger -->
-<button class="menu-btn" id="menuBtn">
-  <span></span><span></span><span></span>
-</button>
+<button class="menu-btn" id="menuBtn"><span></span><span></span><span></span></button>
 
-<!-- Sidebar -->
 <div class="sidebar" id="sidebar">
   <h2>Menu</h2>
   <a href="index.html">Home</a>
@@ -90,87 +51,61 @@ h1{
 </div>
 <div class="overlay" id="overlay"></div>
 
-<!-- Profilo -->
 <div class="profile">
   <div class="profile-pic">AB</div>
   <a href="#" class="username" id="openProfile">@andrea92</a>
 </div>
-<div class="dropdown" id="profileDropdown">
-  <div class="dropdown-content"><h2><strong>Ciao @andrea92</strong></h2></div>
-</div>
+<div class="dropdown" id="profileDropdown"><div class="dropdown-content"><h2><strong>Ciao @andrea92</strong></h2></div></div>
 
-<!-- Titolo -->
 <h1>STOOK</h1>
 
-<!-- Frase + Barra -->
 <p class="main-text">Il tuo ateneo non è tra i più cliccati? Allora:</p>
 <form class="search-box" id="searchForm">
   <input type="text" id="searchInput" placeholder="Cerca qui il tuo ateneo">
   <button type="submit">📝</button>
 </form>
+<div class="result" id="result"></div>
 
-<!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL="INSERISCI_QUI_PROJECT_URL";
-const SUPABASE_ANON_KEY="INSERISCI_QUI_ANON_PUBLIC_KEY";
-const client=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const SUPABASE_URL = "INSERISCI_QUI_PROJECT_URL";
+const SUPABASE_ANON_KEY = "INSERISCI_QUI_ANON_PUBLIC_KEY";
+const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Gestione ricerca
-document.getElementById("searchForm").addEventListener("submit",async e=>{
+const form = document.getElementById("searchForm");
+const input = document.getElementById("searchInput");
+const resultBox = document.getElementById("result");
+
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const val=document.getElementById("searchInput").value.trim().toLowerCase();
-  if(!val) return;
+  const query = input.value.trim();
+  if(!query) return;
 
-  const { data, error } = await client
+  let { data, error } = await client
     .from("atenei")
     .select("*")
-    .eq("tipo","appunti");
+    .eq("tipo","appunti")
+    .ilike("nome", `%${query}%`)
+    .limit(1);
 
-  if(error){ alert("Errore di connessione"); return; }
-
-  const found=data.find(a=>a.nome.toLowerCase().includes(val));
-
-  if(found){
-    await client.from("atenei")
-      .update({clicks:found.clicks+1})
-      .eq("id",found.id);
-
-    alert("Mostro gli appunti di "+found.nome);
-    // Qui in futuro puoi caricare la pagina interna degli appunti di quell'ateneo
-  } else {
-    alert("Nessun ateneo trovato.");
+  if(error || !data || data.length === 0){
+    resultBox.textContent = "Nessun risultato";
+    return;
   }
-});
 
-/* Dropdown profilo */
+  const ateneo = data[0];
+  resultBox.textContent = `Hai selezionato: ${ateneo.nome}`;
+  await client.from("atenei").update({ clicks: ateneo.clicks + 1 }).eq("id", ateneo.id);
+});
 const openBtn=document.getElementById("openProfile");
 const dropdown=document.getElementById("profileDropdown");
-openBtn.addEventListener("click",e=>{
-  e.preventDefault();
-  dropdown.style.display=(dropdown.style.display==="block")?"none":"block";
-});
-window.addEventListener("click",e=>{
-  if(!dropdown.contains(e.target)&&!openBtn.contains(e.target)){
-    dropdown.style.display="none";
-  }
-});
-
-/* Sidebar */
+openBtn.addEventListener("click",e=>{ e.preventDefault(); dropdown.style.display=(dropdown.style.display==="block")?"none":"block"; });
+window.addEventListener("click",e=>{ if(!dropdown.contains(e.target)&&!openBtn.contains(e.target)){ dropdown.style.display="none"; }});
 const menuBtn=document.getElementById("menuBtn");
 const sidebar=document.getElementById("sidebar");
 const overlay=document.getElementById("overlay");
-menuBtn.addEventListener("click",()=>{
-  sidebar.classList.add("open");
-  overlay.classList.add("show");
-  menuBtn.classList.add("hidden");
-});
-overlay.addEventListener("click",()=>{
-  sidebar.classList.remove("open");
-  overlay.classList.remove("show");
-  menuBtn.classList.remove("hidden");
-});
+menuBtn.addEventListener("click",()=>{ sidebar.classList.add("open"); overlay.classList.add("show"); menuBtn.classList.add("hidden"); });
+overlay.addEventListener("click",()=>{ sidebar.classList.remove("open"); overlay.classList.remove("show"); menuBtn.classList.remove("hidden"); });
 </script>
-
 </body>
 </html>
