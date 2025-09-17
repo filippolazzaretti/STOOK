@@ -216,26 +216,54 @@ section + section { margin-top: 2rem; }
   </section>
 </main>
 
-<script>
-/* === DATI SIMULATI === */
-const topAtenei = {
-  libri: ["Politecnico di Milano", "Sapienza Roma", "Università di Bologna", "Università di Torino"],
-  appunti: ["Bocconi", "Università di Padova", "Federico II Napoli", "Università di Firenze"]
-};
+<!-- Importa client Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-/* Genera i riquadri */
-function renderCards(sectionId, items, searchPage){
+<script>
+/* === CONFIGURAZIONE SUPABASE === */
+const SUPABASE_URL = "INSERISCI_QUI_PROJECT_URL";
+const SUPABASE_ANON_KEY = "INSERISCI_QUI_ANON_PUBLIC_KEY";
+
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* === GENERA LE CARD DA SUPABASE === */
+async function renderCards(sectionId, tipo, searchPage){
   const container = document.getElementById(sectionId);
   container.innerHTML = "";
 
-  items.slice(0,4).forEach(ateneo => {
+  // Recupera i 4 atenei più popolari
+  const { data, error } = await supabase
+    .from("atenei")
+    .select("*")
+    .eq("tipo", tipo)
+    .order("clicks", { ascending: false })
+    .limit(4);
+
+  if (error) {
+    console.error("Errore nel recupero dati:", error);
+    container.innerHTML = "<p>Errore nel caricamento.</p>";
+    return;
+  }
+
+  // Crea le card per i 4 atenei
+  data.forEach(ateneo => {
     const div = document.createElement("div");
     div.className = "card";
-    div.innerHTML = `<div class="card-title">${ateneo}</div>`;
-    div.onclick = () => window.open(`${searchPage}?ateneo=${encodeURIComponent(ateneo)}`,"_blank");
+    div.innerHTML = `<div class="card-title">${ateneo.nome}</div>`;
+    div.onclick = async () => {
+      // Incrementa i clicks in Supabase
+      await supabase
+        .from("atenei")
+        .update({ clicks: ateneo.clicks + 1 })
+        .eq("id", ateneo.id);
+
+      // Vai alla pagina di ricerca relativa
+      window.location.href = `${searchPage}?ateneo=${encodeURIComponent(ateneo.nome)}`;
+    };
     container.appendChild(div);
   });
 
+  // Aggiungi la card "Gli altri atenei"
   const altri = document.createElement("div");
   altri.className = "card card-others";
   altri.innerHTML = `<div class="card-title">Gli altri atenei</div>`;
@@ -243,8 +271,9 @@ function renderCards(sectionId, items, searchPage){
   container.appendChild(altri);
 }
 
-renderCards("libri-cards", topAtenei.libri, "GliAltriAtenei.html");
-renderCards("appunti-cards", topAtenei.appunti, "GliAltriAteneiAppunti.html");
+// Carica le card
+renderCards("libri-cards", "libri", "GliAltriAtenei.html");
+renderCards("appunti-cards", "appunti", "GliAltriAteneiAppunti.html");
 
 /* Dropdown profilo */
 const openBtn=document.getElementById("openProfile");
