@@ -178,8 +178,8 @@ section + section { margin-top: 2rem; }
 <div class="sidebar" id="sidebar">
   <h2>Menu</h2>
   <a href="#">Home</a>
-  <a href="#">Libri</a>
-  <a href="#">Appunti</a>
+  <a href="GliAltriAtenei.html">Libri</a>
+  <a href="GliAltriAteneiAppunti.html">Appunti</a>
   <a href="#">Profilo</a>
 </div>
 <div class="overlay" id="overlay"></div>
@@ -220,19 +220,15 @@ section + section { margin-top: 2rem; }
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-/* === CONFIGURAZIONE SUPABASE === */
 const SUPABASE_URL = "INSERISCI_QUI_PROJECT_URL";
 const SUPABASE_ANON_KEY = "INSERISCI_QUI_ANON_PUBLIC_KEY";
+const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-/* === GENERA LE CARD DA SUPABASE === */
 async function renderCards(sectionId, tipo, searchPage){
   const container = document.getElementById(sectionId);
   container.innerHTML = "";
 
-  // Recupera i 4 atenei più popolari
-  const { data, error } = await supabase
+  const { data, error } = await client
     .from("atenei")
     .select("*")
     .eq("tipo", tipo)
@@ -240,30 +236,23 @@ async function renderCards(sectionId, tipo, searchPage){
     .limit(4);
 
   if (error) {
-    console.error("Errore nel recupero dati:", error);
-    container.innerHTML = "<p>Errore nel caricamento.</p>";
+    container.innerHTML = "<p>Errore caricamento dati.</p>";
     return;
   }
 
-  // Crea le card per i 4 atenei
   data.forEach(ateneo => {
     const div = document.createElement("div");
     div.className = "card";
     div.innerHTML = `<div class="card-title">${ateneo.nome}</div>`;
     div.onclick = async () => {
-      // Incrementa i clicks in Supabase
-      await supabase
-        .from("atenei")
+      await client.from("atenei")
         .update({ clicks: ateneo.clicks + 1 })
         .eq("id", ateneo.id);
-
-      // Vai alla pagina di ricerca relativa
       window.location.href = `${searchPage}?ateneo=${encodeURIComponent(ateneo.nome)}`;
     };
     container.appendChild(div);
   });
 
-  // Aggiungi la card "Gli altri atenei"
   const altri = document.createElement("div");
   altri.className = "card card-others";
   altri.innerHTML = `<div class="card-title">Gli altri atenei</div>`;
@@ -271,7 +260,6 @@ async function renderCards(sectionId, tipo, searchPage){
   container.appendChild(altri);
 }
 
-// Carica le card
 renderCards("libri-cards", "libri", "GliAltriAtenei.html");
 renderCards("appunti-cards", "appunti", "GliAltriAteneiAppunti.html");
 
@@ -292,19 +280,16 @@ window.addEventListener("click",e=>{
 const menuBtn=document.getElementById("menuBtn");
 const sidebar=document.getElementById("sidebar");
 const overlay=document.getElementById("overlay");
-
 menuBtn.addEventListener("click",()=>{
   sidebar.classList.add("open");
   overlay.classList.add("show");
   menuBtn.classList.add("hidden");
 });
-
 overlay.addEventListener("click",()=>{
   sidebar.classList.remove("open");
   overlay.classList.remove("show");
   menuBtn.classList.remove("hidden");
 });
 </script>
-
 </body>
 </html>
