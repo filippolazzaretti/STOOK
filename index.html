@@ -239,12 +239,12 @@ function renderCards(sectionId, items, searchPage){
   const altri = document.createElement("div");
   altri.className = "card card-others";
   altri.innerHTML = `<div class="card-title">Gli altri atenei</div>`;
-  altri.onclick = () => window.open(searchPage,"_blank");
+  altri.onclick = () => window.location.href = searchPage;
   container.appendChild(altri);
 }
 
-renderCards("libri-cards", topAtenei.libri, "ricerca-libri.html");
-renderCards("appunti-cards", topAtenei.appunti, "ricerca-appunti.html");
+renderCards("libri-cards", topAtenei.libri, "GliAltriAtenei.html");
+renderCards("appunti-cards", topAtenei.appunti, "GliAltriAteneiAppunti.html");
 
 /* Dropdown profilo */
 const openBtn=document.getElementById("openProfile");
