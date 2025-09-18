@@ -106,14 +106,6 @@ section + section { margin-top: 2rem; }
   text-transform:uppercase;
 }
 
-/* Placeholder */
-.card-placeholder{
-  background:#f9f9f9;
-  color:#aaa;
-  font-style:italic;
-  cursor:default;
-}
-
 /* Responsive */
 @media (max-width: 1000px){
   .card{ flex:0 0 calc((100% - (var(--gap)*2) - 1rem) / 3); }
@@ -185,9 +177,9 @@ section + section { margin-top: 2rem; }
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
   <h2>Menu</h2>
-  <a href="index.html">Home</a>
-  <a href="GliAltriAtenei.html">Libri</a>
-  <a href="GliAltriAteneiAppunti.html">Appunti</a>
+  <a href="#">Home</a>
+  <a href="#">Libri</a>
+  <a href="#">Appunti</a>
   <a href="#">Profilo</a>
 </div>
 <div class="overlay" id="overlay"></div>
@@ -224,57 +216,35 @@ section + section { margin-top: 2rem; }
   </section>
 </main>
 
-<!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = "INSERISCI_QUI_PROJECT_URL";
-const SUPABASE_ANON_KEY = "INSERISCI_QUI_ANON_PUBLIC_KEY";
-const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+/* === DATI SIMULATI === */
+const topAtenei = {
+  libri: ["Politecnico di Milano", "Sapienza Roma", "Università di Bologna", "Università di Torino"],
+  appunti: ["Bocconi", "Università di Padova", "Federico II Napoli", "Università di Firenze"]
+};
 
-/* Funzione per generare le cards da Supabase */
-async function renderCards(sectionId, tipo, searchPage){
+/* Genera i riquadri */
+function renderCards(sectionId, items, searchPage){
   const container = document.getElementById(sectionId);
   container.innerHTML = "";
 
-  let { data, error } = await client
-    .from("atenei")
-    .select("*")
-    .eq("tipo", tipo)
-    .order("clicks", { ascending: false })
-    .limit(4);
-
-  if (error || !data) data = [];
-
-  // Crea 4 card (se non ci sono dati → "Vuoto")
-  for (let i = 0; i < 4; i++) {
-    const ateneo = data[i];
+  items.slice(0,4).forEach(ateneo => {
     const div = document.createElement("div");
-
-    if (ateneo) {
-      div.className = "card";
-      div.innerHTML = `<div class="card-title">${ateneo.nome}</div>`;
-      div.onclick = async () => {
-        await client.from("atenei").update({ clicks: ateneo.clicks + 1 }).eq("id", ateneo.id);
-        window.location.href = `${searchPage}?ateneo=${encodeURIComponent(ateneo.nome)}`;
-      };
-    } else {
-      div.className = "card card-placeholder";
-      div.innerHTML = `<div class="card-title">Vuoto</div>`;
-    }
+    div.className = "card";
+    div.innerHTML = `<div class="card-title">${ateneo}</div>`;
+    div.onclick = () => window.open(`${searchPage}?ateneo=${encodeURIComponent(ateneo)}`,"_blank");
     container.appendChild(div);
-  }
+  });
 
-  // Quinta card "Gli altri atenei"
   const altri = document.createElement("div");
   altri.className = "card card-others";
   altri.innerHTML = `<div class="card-title">Gli altri atenei</div>`;
-  altri.onclick = () => window.location.href = searchPage;
+  altri.onclick = () => window.open(searchPage,"_blank");
   container.appendChild(altri);
 }
 
-/* Render delle due sezioni */
-renderCards("libri-cards", "libri", "GliAltriAtenei.html");
-renderCards("appunti-cards", "appunti", "GliAltriAteneiAppunti.html");
+renderCards("libri-cards", topAtenei.libri, "ricerca-libri.html");
+renderCards("appunti-cards", topAtenei.appunti, "ricerca-appunti.html");
 
 /* Dropdown profilo */
 const openBtn=document.getElementById("openProfile");
