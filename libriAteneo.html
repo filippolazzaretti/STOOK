@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STOOK - Libri</title>
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="stile.css"> <!-- puoi riusare lo stesso CSS della homepage -->
+</head>
+<body>
+
+<!-- Bottone hamburger -->
+<button class="menu-btn" id="menuBtn">
+  <span></span><span></span><span></span>
+</button>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <h2>Menu</h2>
+  <a href="index.html">Home</a>
+  <a href="#">Libri</a>
+  <a href="#">Appunti</a>
+  <a href="#">Profilo</a>
+</div>
+<div class="overlay" id="overlay"></div>
+
+<!-- Profilo utente -->
+<div class="profile">
+  <div class="profile-pic">AB</div>
+  <a href="#" class="username" id="openProfile">@andrea92</a>
+</div>
+<div class="dropdown" id="profileDropdown">
+  <div class="dropdown-content"><h2><strong>Ciao @andrea92</strong></h2></div>
+</div>
+
+<!-- Titolo unico -->
+<h1 id="pageTitle">STOOK</h1>
+
+<main class="main">
+  <section>
+    <div class="section-header">
+      <h2 class="section-title" id="ateneoTitle"></h2>
+      <p class="section-subtitle">Libri disponibili per questo ateneo:</p>
+    </div>
+    <div class="row-5" id="libriContainer"></div>
+  </section>
+</main>
+
+<script>
+// Recupera l’ateneo dalla query string
+const params = new URLSearchParams(window.location.search);
+const ateneo = params.get("ateneo");
+
+// Inserisce il nome nella pagina
+document.getElementById("ateneoTitle").textContent = ateneo ?? "Ateneo non trovato";
+
+// Esempio di libri (in futuro potrai caricarli da DB o file JSON)
+const libriDemo = {
+  "Università Ca' Foscari di Venezia": ["Libro A", "Libro B", "Libro C"],
+  "Università degli studi di Padova": ["Libro D", "Libro E"],
+  "Università degli studi di Trieste": ["Libro F", "Libro G", "Libro H", "Libro I"],
+  "Alma Mater Studiorum - Università di Bologna": ["Libro J"]
+};
+
+const container = document.getElementById("libriContainer");
+if (libriDemo[ateneo]) {
+  libriDemo[ateneo].forEach(libro => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.textContent = libro;
+    container.appendChild(div);
+  });
+} else {
+  container.innerHTML = "<p>Nessun libro disponibile per questo ateneo.</p>";
+}
+
+// Dropdown profilo
+const openBtn=document.getElementById("openProfile");
+const dropdown=document.getElementById("profileDropdown");
+openBtn.addEventListener("click",e=>{
+  e.preventDefault();
+  dropdown.style.display=(dropdown.style.display==="block")?"none":"block";
+});
+window.addEventListener("click",e=>{
+  if(!dropdown.contains(e.target)&&!openBtn.contains(e.target)){
+    dropdown.style.display="none";
+  }
+});
+
+// Sidebar
+const menuBtn=document.getElementById("menuBtn");
+const sidebar=document.getElementById("sidebar");
+const overlay=document.getElementById("overlay");
+
+menuBtn.addEventListener("click",()=>{
+  sidebar.classList.add("open");
+  overlay.classList.add("show");
+  menuBtn.classList.add("hidden");
+});
+overlay.addEventListener("click",()=>{
+  sidebar.classList.remove("open");
+  overlay.classList.remove("show");
+  menuBtn.classList.remove("hidden");
+});
+</script>
+
+</body>
+</html>
