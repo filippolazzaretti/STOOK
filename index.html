@@ -242,7 +242,7 @@ function renderCards(sectionId, items, searchPage){
     const div = document.createElement("div");
     div.className = "card";
     div.innerHTML = `<div class="card-title">${ateneo.nome}</div>`;
-    div.onclick = () => window.open(`${searchPage}?ateneo=${encodeURIComponent(ateneo.nome)}`,"_blank");
+    div.onclick = () => window.location.href = `libriAteneo.html?ateneo=${encodeURIComponent(ateneo.nome)}`;
     container.appendChild(div);
   });
 
