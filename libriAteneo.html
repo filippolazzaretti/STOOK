@@ -161,11 +161,11 @@ document.getElementById("ateneoTitle").textContent = ateneo;
 
 const libriDemo = {
   "Università Ca' Foscari di Venezia": [
-    { titolo: "Libro A", prezzo: 8, condizione: "Buono" },
-    { titolo: "Libro B", prezzo: 15, condizione: "Ottimo" }
+    { id: 1, titolo: "Libro A", prezzo: 8,  condizione: "Buono"  },
+    { id: 2, titolo: "Libro B", prezzo: 15, condizione: "Ottimo" }
   ],
   "Università degli studi di Padova": [
-    { titolo: "Libro C", prezzo: 25, condizione: "Come nuovo" }
+    { id: 3, titolo: "Libro C", prezzo: 25, condizione: "Come nuovo" }
   ]
 };
 
@@ -175,14 +175,19 @@ function renderBooks(){
   container.innerHTML = "";
   const books = libriDemo[ateneo] || [];
   if(books.length){
-    books.forEach(book=>{
-      const div = document.createElement("div");
-      div.className = "card";
-      div.innerHTML = `<div class="card-title">${book.titolo}</div>
-                       <div>💶 ${book.prezzo} €</div>
-                       <div>📚 ${book.condizione}</div>`;
-      container.appendChild(div);
-    });
+  books.forEach(book=>{
+    const div = document.createElement("div");
+  div.className = "card";
+  div.innerHTML = `
+    <div class="card-title">${book.titolo}</div>
+    <div>💶 ${book.prezzo} €</div>
+    <div>📚 ${book.condizione}</div>`;
+  div.onclick = () => {
+    window.location.href = `libroDettaglio.html?id=${encodeURIComponent(book.id)}`;
+  };
+  container.appendChild(div);
+});
+
   } else {
     container.innerHTML = "<p>Nessun libro trovato.</p>";
   }
