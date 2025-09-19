@@ -50,7 +50,7 @@ h1{
 /* === Modale login === */
 .modal{
   display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-  background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,0.5); align-items:center; justify-content:center;
 }
 .modal-content{
   background:#fff; padding:2rem; border-radius:12px; width:90%; max-width:400px;
@@ -80,11 +80,11 @@ h1{
 <h1 id="pageTitle">STOOK</h1>
 
 <!-- Contenuto principale -->
-<main class="main" id="mainContent" style="display:none;">
+<main class="main" id="mainContent">
   <div class="section-header">
     <div>
       <h2 class="section-title" id="ateneoTitle"></h2>
-      <p class="section-subtitle">Libri disponibili per questo ateneo:</p>
+      <p class="section-subtitle" id="subtitleText"></p>
     </div>
   </div>
   <div class="row-5" id="libriContainer"></div>
@@ -109,19 +109,12 @@ const passwordInput = document.getElementById("passwordInput");
 const profilePic = document.getElementById("profilePic");
 const openProfile = document.getElementById("openProfile");
 const welcomeText = document.getElementById("welcomeText");
-const mainContent = document.getElementById("mainContent");
 
-function isLoggedIn(){
-  return localStorage.getItem("user");
-}
+let pendingRedirect = null; // salva l'annuncio che volevo aprire
 
-function showLoginModal(){
-  loginModal.style.display="flex";
-}
-
-function hideLoginModal(){
-  loginModal.style.display="none";
-}
+function isLoggedIn(){ return localStorage.getItem("user"); }
+function showLoginModal(){ loginModal.style.display="flex"; }
+function hideLoginModal(){ loginModal.style.display="none"; }
 
 function updateUI(){
   const user = isLoggedIn();
@@ -129,11 +122,9 @@ function updateUI(){
     openProfile.textContent = "@"+user;
     profilePic.textContent = user.charAt(0).toUpperCase();
     welcomeText.textContent = "Ciao @" + user;
-    mainContent.style.display="block";
   } else {
     openProfile.textContent = "Accedi";
     profilePic.textContent = "?";
-    mainContent.style.display="none";
   }
 }
 
@@ -143,7 +134,10 @@ loginBtn.addEventListener("click",()=>{
     localStorage.setItem("user", user);
     hideLoginModal();
     updateUI();
-    renderBooks();
+    if(pendingRedirect){
+      window.location.href = pendingRedirect;
+      pendingRedirect = null;
+    }
   } else {
     alert("Inserisci username e password");
   }
@@ -154,12 +148,16 @@ openProfile.addEventListener("click",(e)=>{
   if(!isLoggedIn()){ showLoginModal(); }
 });
 
-// === Dati demo libri ===
+// === Recupero parametri URL ===
 const params = new URLSearchParams(window.location.search);
 const ateneo = params.get("ateneo") ?? "Ateneo sconosciuto";
+const tipo = params.get("tipo") ?? "libri";
 document.getElementById("ateneoTitle").textContent = ateneo;
+document.getElementById("subtitleText").textContent = 
+  tipo==="appunti" ? "Appunti disponibili per questo ateneo:" : "Libri disponibili per questo ateneo:";
 
-const libriDemo = {
+// === Dati demo ===
+const annunciDemo = {
   "Università Ca' Foscari di Venezia": [
     { id: 1, titolo: "Libro A", prezzo: 8,  condizione: "Buono"  },
     { id: 2, titolo: "Libro B", prezzo: 15, condizione: "Ottimo" }
@@ -171,31 +169,36 @@ const libriDemo = {
 
 const container = document.getElementById("libriContainer");
 
-function renderBooks(){
+function renderAnnunci(){
   container.innerHTML = "";
-  const books = libriDemo[ateneo] || [];
-  if(books.length){
-  books.forEach(book=>{
-    const div = document.createElement("div");
-  div.className = "card";
-  div.innerHTML = `
-    <div class="card-title">${book.titolo}</div>
-    <div>💶 ${book.prezzo} €</div>
-    <div>📚 ${book.condizione}</div>`;
-  div.onclick = () => {
-    window.location.href = `libroDettaglio.html?id=${encodeURIComponent(book.id)}`;
-  };
-  container.appendChild(div);
-});
-
+  const lista = annunciDemo[ateneo] || [];
+  if(lista.length){
+    lista.forEach(item=>{
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = `
+        <div class="card-title">${item.titolo}</div>
+        <div>💶 ${item.prezzo} €</div>
+        <div>📚 ${item.condizione}</div>`;
+      div.onclick = () => {
+        const url = `libroDettaglio.html?id=${encodeURIComponent(item.id)}`;
+        if(isLoggedIn()){
+          window.location.href = url;
+        } else {
+          pendingRedirect = url;
+          showLoginModal();
+        }
+      };
+      container.appendChild(div);
+    });
   } else {
-    container.innerHTML = "<p>Nessun libro trovato.</p>";
+    container.innerHTML = "<p>Nessun annuncio trovato.</p>";
   }
 }
 
 // === Avvio pagina ===
 updateUI();
-if(isLoggedIn()){ renderBooks(); } else { showLoginModal(); }
+renderAnnunci();
 </script>
 </body>
 </html>
