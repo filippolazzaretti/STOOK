@@ -53,7 +53,7 @@ h1{
 /* Titoli sezione */
 .section-header{
   display:flex; flex-direction:column; align-items:flex-start;
-  margin:1rem 0 .5rem 1rem;
+  margin:1rem 0 .5rem 0;
 }
 .section-title{
   font-family:'Luckiest Guy', cursive;
@@ -95,18 +95,7 @@ section + section { margin-top: 2rem; }
 .card:hover{ transform:scale(1.02); }
 .card-title{ font-weight:600; font-size:.95rem; }
 
-/* Riquadro speciale "Gli altri atenei" */
-.card-others{
-  border:3px solid #000;
-}
-.card-others .card-title{
-  font-family:'Luckiest Guy', cursive;
-  font-weight:400;
-  font-size:1rem;
-  text-transform:uppercase;
-}
-
-/* Responsive */
+/* Responsive cards */
 @media (max-width: 1000px){
   .card{ flex:0 0 calc((100% - (var(--gap)*2) - 1rem) / 3); }
 }
@@ -163,6 +152,41 @@ section + section { margin-top: 2rem; }
   text-decoration:none;
   color:#000;
 }
+
+/* === Layout a due colonne (filtri + libri) === */
+.content-layout{
+  display:flex;
+  align-items:flex-start;
+  gap:1.5rem;
+  padding:0 1rem;
+}
+.filters{
+  flex:0 0 200px;
+  border:1px solid var(--card-border);
+  border-radius:var(--card-radius);
+  background:#fafafa;
+  padding:1rem;
+  font-size:.9rem;
+}
+.filters h3{
+  margin-bottom:.5rem;
+  font-family:'Luckiest Guy', cursive;
+  font-size:1.2rem;
+}
+.filter-group{ margin-bottom:1rem; }
+.books{ flex:1; }
+#sortSelect{
+  margin-top:.5rem;
+  padding:.4rem;
+  border:1px solid #ccc;
+  border-radius:6px;
+}
+
+/* Responsive layout */
+@media (max-width:800px){
+  .content-layout{ flex-direction:column; }
+  .filters{ width:100%; }
+}
 </style>
 </head>
 <body>
@@ -195,42 +219,135 @@ section + section { margin-top: 2rem; }
 <h1 id="pageTitle">STOOK</h1>
 
 <main class="main">
-  <section>
-    <div class="section-header">
-      <h2 class="section-title" id="ateneoTitle"></h2>
-      <p class="section-subtitle">Libri disponibili per questo ateneo:</p>
-    </div>
-    <div class="row-5" id="libriContainer"></div>
-  </section>
+  <div class="content-layout">
+    <!-- Colonna filtri -->
+    <aside class="filters">
+      <h3>Filtri</h3>
+      <div class="filter-group">
+        <p><strong>Prezzo</strong></p>
+        <label><input type="checkbox" name="price" value="0-10"> 0-10 €</label><br>
+        <label><input type="checkbox" name="price" value="10-20"> 10-20 €</label><br>
+        <label><input type="checkbox" name="price" value="30+"> 30+ €</label>
+      </div>
+      <div class="filter-group">
+        <p><strong>Condizione</strong></p>
+        <label><input type="checkbox" name="condition" value="Buono"> Buono</label><br>
+        <label><input type="checkbox" name="condition" value="Ottimo"> Ottimo</label><br>
+        <label><input type="checkbox" name="condition" value="Come nuovo"> Come nuovo</label>
+      </div>
+    </aside>
+
+    <!-- Colonna libri -->
+    <section class="books">
+      <div class="section-header">
+        <h2 class="section-title" id="ateneoTitle"></h2>
+        <p class="section-subtitle">Libri disponibili per questo ateneo:</p>
+        <select id="sortSelect">
+          <option value="">Ordina per...</option>
+          <option value="price-asc">Prezzo crescente</option>
+          <option value="price-desc">Prezzo decrescente</option>
+          <option value="condition-asc">Condizione (Buono → Come nuovo)</option>
+          <option value="condition-desc">Condizione (Come nuovo → Buono)</option>
+        </select>
+      </div>
+      <div class="row-5" id="libriContainer"></div>
+    </section>
+  </div>
 </main>
 
 <script>
 // Recupera l’ateneo dalla query string
 const params = new URLSearchParams(window.location.search);
 const ateneo = params.get("ateneo");
-
-// Inserisce il nome nella pagina
 document.getElementById("ateneoTitle").textContent = ateneo ?? "Ateneo non trovato";
 
-// Esempio di libri (in futuro potrai caricarli da DB o file JSON)
+// Database demo con prezzo + condizione
 const libriDemo = {
-  "Università Ca' Foscari di Venezia": ["Libro A", "Libro B", "Libro C"],
-  "Università degli studi di Padova": ["Libro D", "Libro E"],
-  "Università degli studi di Trieste": ["Libro F", "Libro G", "Libro H", "Libro I"],
-  "Alma Mater Studiorum - Università di Bologna": ["Libro J"]
+  "Università Ca' Foscari di Venezia": [
+    { titolo: "Libro A", prezzo: 8, condizione: "Buono" },
+    { titolo: "Libro B", prezzo: 15, condizione: "Ottimo" },
+    { titolo: "Libro C", prezzo: 35, condizione: "Come nuovo" }
+  ],
+  "Università degli studi di Padova": [
+    { titolo: "Libro D", prezzo: 5, condizione: "Come nuovo" },
+    { titolo: "Libro E", prezzo: 25, condizione: "Ottimo" }
+  ],
+  "Università degli studi di Trieste": [
+    { titolo: "Libro F", prezzo: 12, condizione: "Buono" },
+    { titolo: "Libro G", prezzo: 9, condizione: "Ottimo" },
+    { titolo: "Libro H", prezzo: 30, condizione: "Come nuovo" },
+    { titolo: "Libro I", prezzo: 18, condizione: "Buono" }
+  ],
+  "Alma Mater Studiorum - Università di Bologna": [
+    { titolo: "Libro J", prezzo: 28, condizione: "Ottimo" }
+  ]
 };
 
 const container = document.getElementById("libriContainer");
-if (libriDemo[ateneo]) {
-  libriDemo[ateneo].forEach(libro => {
-    const div = document.createElement("div");
-    div.className = "card";
-    div.textContent = libro;
-    container.appendChild(div);
+
+// Funzione per renderizzare i libri filtrati e ordinati
+function renderBooks(){
+  container.innerHTML = "";
+
+  let books = libriDemo[ateneo] || [];
+
+  // FILTRI
+  const selectedPrices = Array.from(document.querySelectorAll('input[name="price"]:checked')).map(el=>el.value);
+  const selectedConditions = Array.from(document.querySelectorAll('input[name="condition"]:checked')).map(el=>el.value);
+
+  books = books.filter(book=>{
+    let matchPrice = true;
+    if(selectedPrices.length){
+      matchPrice = selectedPrices.some(range=>{
+        if(range==="0-10") return book.prezzo>=0 && book.prezzo<=10;
+        if(range==="10-20") return book.prezzo>10 && book.prezzo<=20;
+        if(range==="30+") return book.prezzo>=30;
+      });
+    }
+    let matchCondition = true;
+    if(selectedConditions.length){
+      matchCondition = selectedConditions.includes(book.condizione);
+    }
+    return matchPrice && matchCondition;
   });
-} else {
-  container.innerHTML = "<p>Nessun libro disponibile per questo ateneo.</p>";
+
+  // ORDINAMENTO
+  const sortValue = document.getElementById("sortSelect").value;
+  if(sortValue==="price-asc"){
+    books.sort((a,b)=>a.prezzo-b.prezzo);
+  } else if(sortValue==="price-desc"){
+    books.sort((a,b)=>b.prezzo-a.prezzo);
+  } else if(sortValue==="condition-asc"){
+    const order = ["Buono","Ottimo","Come nuovo"];
+    books.sort((a,b)=>order.indexOf(a.condizione)-order.indexOf(b.condizione));
+  } else if(sortValue==="condition-desc"){
+    const order = ["Come nuovo","Ottimo","Buono"];
+    books.sort((a,b)=>order.indexOf(a.condizione)-order.indexOf(b.condizione));
+  }
+
+  // RENDER CARDS
+  if(books.length){
+    books.forEach(book=>{
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = `<div class="card-title">${book.titolo}</div>
+                       <div>💶 ${book.prezzo} €</div>
+                       <div>📚 ${book.condizione}</div>`;
+      container.appendChild(div);
+    });
+  } else {
+    container.innerHTML = "<p>Nessun libro trovato con i filtri selezionati.</p>";
+  }
 }
+
+// Primo render
+renderBooks();
+
+// Eventi filtri e ordinamento
+document.querySelectorAll('.filters input').forEach(el=>{
+  el.addEventListener("change", renderBooks);
+});
+document.getElementById("sortSelect").addEventListener("change", renderBooks);
 
 // Dropdown profilo
 const openBtn=document.getElementById("openProfile");
@@ -249,7 +366,6 @@ window.addEventListener("click",e=>{
 const menuBtn=document.getElementById("menuBtn");
 const sidebar=document.getElementById("sidebar");
 const overlay=document.getElementById("overlay");
-
 menuBtn.addEventListener("click",()=>{
   sidebar.classList.add("open");
   overlay.classList.add("show");
