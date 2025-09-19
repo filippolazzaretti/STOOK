@@ -162,6 +162,7 @@ h1{
   background:#fff; /* stesso sfondo pagina */
   padding:0;
   font-size:.9rem;
+  margin-top:2.5rem; /* 🔹 sposta i filtri più in giù */
 }
 .filters h3{
   margin-bottom:.5rem;
@@ -183,7 +184,7 @@ h1{
 /* Responsive layout */
 @media (max-width:800px){
   .content-layout{ flex-direction:column; }
-  .filters{ width:100%; }
+  .filters{ width:100%; margin-top:0; }
   .section-header{ flex-direction:column; align-items:flex-start; gap:.5rem; }
 }
 </style>
