@@ -234,7 +234,7 @@ const topAtenei = {
 };
 
 /* Genera i riquadri */
-function renderCards(sectionId, items, searchPage){
+function renderCards(sectionId, items, tipo, searchPage){
   const container = document.getElementById(sectionId);
   container.innerHTML = "";
 
@@ -242,7 +242,8 @@ function renderCards(sectionId, items, searchPage){
     const div = document.createElement("div");
     div.className = "card";
     div.innerHTML = `<div class="card-title">${ateneo.nome}</div>`;
-    div.onclick = () => window.location.href = `libriAteneo.html?ateneo=${encodeURIComponent(ateneo.nome)}`;
+    // passo sia il tipo (libri/appunti) che l'ateneo
+    div.onclick = () => window.location.href = `libriAteneo.html?tipo=${tipo}&ateneo=${encodeURIComponent(ateneo.nome)}`;
     container.appendChild(div);
   });
 
@@ -253,8 +254,8 @@ function renderCards(sectionId, items, searchPage){
   container.appendChild(altri);
 }
 
-renderCards("libri-cards", topAtenei.libri, "GliAltriAtenei.html");
-renderCards("appunti-cards", topAtenei.appunti, "GliAltriAteneiAppunti.html");
+renderCards("libri-cards", topAtenei.libri, "libri", "GliAltriAtenei.html");
+renderCards("appunti-cards", topAtenei.appunti, "appunti", "GliAltriAteneiAppunti.html");
 
 /* Dropdown profilo */
 const openBtn=document.getElementById("openProfile");
