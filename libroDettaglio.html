@@ -23,8 +23,10 @@ h1{ font-family:'Luckiest Guy', cursive; text-align:center; margin:1rem 0; }
 
 /* Modale login */
 .modal{
-  display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-  background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center;
+  display:none;               /* ← resta SOLO questo */
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.5);
+  /* NON rimettere display:flex qui */
 }
 .modal-content{
   background:#fff; padding:2rem; border-radius:12px; width:90%; max-width:400px;
@@ -65,8 +67,8 @@ h1{ font-family:'Luckiest Guy', cursive; text-align:center; margin:1rem 0; }
 <script>
 // === Dati demo ===
 const libriDemo = {
-  1: { titolo:"Libro A", prezzo:"8 €", condizione:"Buono", descrizione:"Manuale usato di economia, ottime condizioni." },
-  2: { titolo:"Libro B", prezzo:"15 €", condizione:"Ottimo", descrizione:"Libro di diritto, evidenziato ma ben tenuto." },
+  1: { titolo:"Libro A", prezzo:"8 €",  condizione:"Buono",      descrizione:"Manuale usato di economia, ottime condizioni." },
+  2: { titolo:"Libro B", prezzo:"15 €", condizione:"Ottimo",     descrizione:"Libro di diritto, evidenziato ma ben tenuto." },
   3: { titolo:"Libro C", prezzo:"25 €", condizione:"Come nuovo", descrizione:"Edizione aggiornata, praticamente nuovo." }
 };
 
