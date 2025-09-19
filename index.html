@@ -219,8 +219,18 @@ section + section { margin-top: 2rem; }
 <script>
 /* === DATI SIMULATI === */
 const topAtenei = {
-  libri: ["Politecnico di Milano", "Sapienza Roma", "Università di Bologna", "Università di Torino"],
-  appunti: ["Bocconi", "Università di Padova", "Federico II Napoli", "Università di Firenze"]
+  libri: [
+    { nome: "Università Ca' Foscari di Venezia" },
+    { nome: "Università degli studi di Padova" },
+    { nome: "Università degli studi di Trieste" },
+    { nome: "Alma Mater Studiorum - Università di Bologna" }
+  ],
+  appunti: [
+    { nome: "Università Ca' Foscari di Venezia" },
+    { nome: "Università degli studi di Padova" },
+    { nome: "Università degli studi di Trieste" },
+    { nome: "Alma Mater Studiorum - Università di Bologna" }
+  ]
 };
 
 /* Genera i riquadri */
@@ -231,8 +241,8 @@ function renderCards(sectionId, items, searchPage){
   items.slice(0,4).forEach(ateneo => {
     const div = document.createElement("div");
     div.className = "card";
-    div.innerHTML = `<div class="card-title">${ateneo}</div>`;
-    div.onclick = () => window.open(`${searchPage}?ateneo=${encodeURIComponent(ateneo)}`,"_blank");
+    div.innerHTML = `<div class="card-title">${ateneo.nome}</div>`;
+    div.onclick = () => window.open(`${searchPage}?ateneo=${encodeURIComponent(ateneo.nome)}`,"_blank");
     container.appendChild(div);
   });
 
@@ -245,6 +255,8 @@ function renderCards(sectionId, items, searchPage){
 
 renderCards("libri-cards", topAtenei.libri, "GliAltriAtenei.html");
 renderCards("appunti-cards", topAtenei.appunti, "GliAltriAteneiAppunti.html");
+</script>
+
 
 /* Dropdown profilo */
 const openBtn=document.getElementById("openProfile");
