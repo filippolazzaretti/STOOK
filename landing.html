@@ -8,7 +8,7 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Inter', sans-serif; /* Usa lo stesso font che hai già incluso */
+      font-family: 'Inter', sans-serif;
       background-color: #ffffff;
       color: #000000;
     }
@@ -25,10 +25,8 @@
 
     header p {
       font-size: 1.2rem;
-      margin: 15px 0 30px;
+      margin: 15px auto 30px;
       max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
     }
 
     .cta-btn {
@@ -40,6 +38,7 @@
       text-decoration: none;
       font-weight: 600;
       transition: background 0.3s ease;
+      cursor: pointer;
     }
 
     .cta-btn:hover {
@@ -86,6 +85,29 @@
       padding: 30px;
       margin-top: 60px;
     }
+
+    /* LOGIN FORM */
+    #login-form {
+      margin-top: 40px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    #error {
+      color: red;
+      display: none;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -95,7 +117,7 @@
     <h1>Il marketplace degli studenti</h1>
     <p>Compra e vendi libri usati o condividi i tuoi appunti in pochi click. 
        Risparmia tempo, denaro e aiuta altri studenti come te.</p>
-    <a href="/signup" class="cta-btn">Iscriviti gratis</a>
+    <a href="#login-form" class="cta-btn">Accedi</a>
   </header>
 
   <!-- COME FUNZIONA -->
@@ -126,13 +148,38 @@
   <!-- CTA FINALE -->
   <section>
     <h2>Pronto a iniziare?</h2>
-    <a href="/signup" class="cta-btn">Unisciti ora</a>
+    <a href="#login-form" class="cta-btn">Unisciti ora</a>
+  </section>
+
+  <!-- LOGIN -->
+  <section id="login-form">
+    <h2>Accedi come proprietario</h2>
+    <form onsubmit="return login(event)">
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit" class="cta-btn">Entra</button>
+    </form>
+    <p id="error">Credenziali errate!</p>
   </section>
 
   <!-- FOOTER -->
   <footer>
     <p>© 2025 Stook - Tutti i diritti riservati</p>
   </footer>
+
+  <script>
+    function login(event) {
+      event.preventDefault();
+      const user = document.getElementById('username').value;
+      const pass = document.getElementById('password').value;
+      
+      if (user === "Filippo" && pass === "2002") {
+        window.location.href = "home.html"; // <-- qui punta alla tua homepage privata
+      } else {
+        document.getElementById('error').style.display = "block";
+      }
+    }
+  </script>
 
 </body>
 </html>
