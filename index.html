@@ -17,11 +17,7 @@
       color: #000000;
     }
 
-    header {
-      text-align: center;
-      padding: 100px 20px 60px;
-    }
-
+    /* Titolo principale */
     header h1 {
       margin: 1rem 0;
       font-size: clamp(2.5rem, 8vw, 6rem);
@@ -39,10 +35,18 @@
       font-weight: 600;
     }
 
+    /* Descrizione sotto il titolo */
     header p {
-      font-size: 1.2rem;
+      font-size: 1.5rem;   /* aumentata per leggibilità */
+      line-height: 1.6;
       margin: 15px auto 30px;
-      max-width: 600px;
+      max-width: 700px;
+    }
+
+    /* Evidenziazione parole chiave */
+    .highlight {
+      font-family: 'Luckiest Guy', cursive;
+      text-transform: uppercase;
     }
 
     .cta-container {
@@ -150,7 +154,7 @@
     }
   </style>
 
-  <!-- Import del font Luckiest Guy da Google Fonts -->
+  <!-- Import del font Luckiest Guy -->
   <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -159,8 +163,14 @@
   <header>
     <h1>STOOK</h1>
     <h2>Il marketplace degli studenti</h2>
-    <p>Compra e vendi libri usati o condividi i tuoi appunti in pochi click. 
-       Risparmia tempo, denaro e aiuta altri studenti come te.</p>
+    <p>
+      <span class="highlight">Compra</span> e 
+      <span class="highlight">vendi</span> 
+      <span class="highlight">libri</span> 
+      <span class="highlight">usati</span> o condividi i tuoi 
+      <span class="highlight">appunti</span> in pochi click. 
+      Risparmia tempo, denaro e aiuta altri studenti come te.
+    </p>
 
     <div class="cta-container">
       <a href="#login-form" class="cta-btn">Accedi</a>
