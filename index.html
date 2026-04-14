@@ -40,7 +40,8 @@
     .nav-inner {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 14px 20px;
+      padding: 14px 12px;
+      padding: 10px 8px 10px 6px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -52,21 +53,30 @@
       text-transform: uppercase;
       letter-spacing: 1px;
       font-size: 1.4rem;
+      line-height: 1;
+      margin: 0;
     }
 
     .nav-links {
       display: flex;
       gap: 14px;
+      gap: 18px;
       flex-wrap: wrap;
       justify-content: flex-end;
+      align-items: center;
+      margin-left: auto;
     }
 
     .nav-links a {
       color: var(--text);
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 600
       font-size: 0.95rem;
       opacity: 0.9;
+      font-size: 0.92rem;
+      letter-spacing: 0.01em;
+      opacity: 0.88;
+      white-space: nowrap;
     }
 
     .nav-links a:hover { opacity: 1; text-decoration: underline; }
@@ -263,9 +273,17 @@
     @media (max-width: 520px) {
       header h2 { font-size: 1.6rem; }
       header p { font-size: 1.1rem; }
-      .nav-inner { flex-direction: column; align-items: flex-start; }
+      .nav-inner { flex-direction: column; align-items: stretch; }
       .nav-links { justify-content: flex-start; }
-    }
+      .nav-inner {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px;
+      }
+      .nav-links {
+        justify-content: flex-start;
+        gap: 12px;
+      }
   </style>
 </head>
 
