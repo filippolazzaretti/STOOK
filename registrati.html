@@ -151,7 +151,26 @@
     .back-link:hover {
       text-decoration: underline;
     }
+    .message {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      line-height: 1.5;
+      font-size: 0.94rem;
+      display: none;
+    }
 
+    .message.success {
+      background: #f1f7f1;
+      border: 1px solid #cfe3cf;
+      color: #234023;
+    }
+
+    .message.error {
+      background: #fff2f2;
+      border: 1px solid #ecc9c9;
+      color: #7a1f1f;
+    }
     @media (max-width: 520px) {
       .topbar {
         padding: 12px 14px;
@@ -174,7 +193,7 @@
       <h1>Registrati</h1>
       <p class="intro">Crea il tuo account per iniziare a comprare e vendere libri usati tra studenti.</p>
 
-      <form method="post" action="#" autocomplete="on">
+      <form id="register-form" method="post" action="#" autocomplete="on">
         <div class="field">
           <label for="name">Nome e cognome</label>
           <input type="text" id="name" name="name" placeholder="Inserisci il tuo nome" autocomplete="name" required>
@@ -195,9 +214,57 @@
         <p class="login-link">Hai gia un account? <a href="accedi.html">Accedi</a></p>
       </form>
 
+      <div id="register-success" class="message success"></div>
+      <div id="register-error" class="message error"></div>
+
       <a href="index.html" class="back-link">Torna alla home</a>
     </section>
   </main>
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://uaelkranbqialxjpoqkk.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhZWxrcmFuYnFpYWx4anBvcWtrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzExMDcsImV4cCI6MjA5MTc0NzEwN30.3RAuhcrAlemr9EpwQsdJRj6xzeS2CH0OxRvQrHVFdns';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const registerForm = document.getElementById('register-form');
+    const nameInput = document.getElementById('name');
+    const registerEmailInput = document.getElementById('register-email');
+    const registerPasswordInput = document.getElementById('register-password');
+    const registerSuccess = document.getElementById('register-success');
+    const registerError = document.getElementById('register-error');
+
+    registerForm.addEventListener('submit', async function (event) {
+      event.preventDefault();
+      registerSuccess.style.display = 'none';
+      registerError.style.display = 'none';
+
+      const fullName = nameInput.value.trim();
+      const email = registerEmailInput.value.trim();
+      const password = registerPasswordInput.value;
+
+      const emailRedirectTo = window.location.origin + '/accedi.html';
+      const { error } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          emailRedirectTo: emailRedirectTo,
+          data: {
+            full_name: fullName
+          }
+        }
+      });
+
+      if (error) {
+        registerError.textContent = error.message;
+        registerError.style.display = 'block';
+        return;
+      }
+
+      registerSuccess.textContent = 'Account creato. Controlla la tua email per confermare la registrazione prima di accedere.';
+      registerSuccess.style.display = 'block';
+      registerForm.reset();
+    });
+  </script>
 </body>
 </html>
 
