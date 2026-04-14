@@ -54,7 +54,7 @@
       line-height: 1;
       margin: 0;
     }
-    
+
     header {
       min-height: calc(100vh - 54px);
       padding: 32px 20px 72px;
@@ -103,7 +103,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 28px;
+      gap: 18px;
       flex-wrap: wrap;
     }
 
@@ -180,7 +180,7 @@
       color: #ffffff;
       text-align: center;
       padding: 30px;
-      margin-top: 0px;
+      margin-top: 0;
     }
 
     @media (max-width: 520px) {
@@ -188,21 +188,32 @@
         min-height: calc(100vh - 92px);
         padding: 24px 18px 56px;
       }
-      header h2 { font-size: 1.6rem; }
-      header p { font-size: 1.1rem; }
+
+      header h2 {
+        font-size: 1.6rem;
+      }
+
+      header p {
+        font-size: 1.1rem;
+      }
+
       .nav-inner {
         padding: 12px;
       }
+
       .cta-container {
         gap: 14px;
       }
+
       #how {
         padding-top: 110px;
       }
+
       section {
         min-height: auto;
         padding: 96px 18px 72px;
       }
+
       .why-grid {
         grid-template-columns: 1fr;
       }
@@ -236,9 +247,7 @@
     </p>
 
     <div class="cta-container">
-      <a href="login.html" class="cta-btn">Accedi</a>
-      <span>o</span>
-      <a href="#register" class="cta-btn">Registrati</a>
+      <a href="accedi.html" class="cta-btn">Accedi</a>
     </div>
   </header>
 
@@ -255,13 +264,16 @@
     <h2>Perche scegliere STOOK</h2>
     <div class="why-grid">
       <div class="col">
-         <h3>Risparmia davvero</h3>
+        <h3>Risparmia davvero</h3>
         <p>Trova libri usati a prezzi piu accessibili e riduci il costo dei materiali universitari semestre dopo semestre.</p>
       </div>
       <div class="col">
         <h3>Tutto tra studenti</h3>
         <p>Una piattaforma pensata per chi studia: annunci chiari, scambi semplici e piu fiducia tra persone con le stesse esigenze.</p>
       </div>
+      <div class="col">
+        <h3>Dai valore a cio che hai</h3>
+        <p>Rimetti in circolo libri e materiali che non usi piu, aiutando altri studenti e recuperando parte della spesa.</p>
       </div>
     </div>
   </section>
@@ -269,37 +281,5 @@
   <footer>
     <p>© 2025 Stook - Tutti i diritti riservati</p>
   </footer>
-
-  <script>
-    function togglePassword() {
-      const input = document.getElementById('password');
-      const btn = document.querySelector('.toggle');
-      const isHidden = input.type === 'password';
-      input.type = isHidden ? 'text' : 'password';
-      btn.textContent = isHidden ? 'Nascondi' : 'Mostra';
-    }
-
-    function login(event) {
-      event.preventDefault();
-      const user = document.getElementById('username').value.trim();
-      const pass = document.getElementById('password').value;
-
-      const err = document.getElementById('error');
-      err.style.display = 'none';
-
-      if (user === 'Filippo' && pass === '2002') {
-        window.location.href = 'home.html';
-      } else {
-        err.style.display = 'block';
-      }
-      return false;
-    }
-
-    function fakeRegister(event) {
-      event.preventDefault();
-      alert('Registrazione demo: qui collegheremo un sistema reale.');
-      return false;
-    }
-  </script>
 </body>
 </html>
