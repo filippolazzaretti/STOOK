@@ -84,6 +84,26 @@
       margin-bottom: 18px;
     }
 
+    .password-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .forgot-link {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .forgot-link:hover {
+      text-decoration: underline;
+    }
+    
     input {
       width: 100%;
       padding: 14px 16px;
@@ -101,6 +121,28 @@
       box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.08);
     }
 
+     .remember-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 8px 0 6px;
+    }
+
+    .remember-row input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      margin: 0;
+      border-radius: 4px;
+      accent-color: #000000;
+    }
+
+    .remember-row label {
+      margin: 0;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    
     .cta-btn {
       display: inline-block;
       width: 100%;
@@ -135,6 +177,24 @@
       text-decoration: underline;
     }
 
+    .register-link {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .register-link a {
+      color: var(--text);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .register-link a:hover {
+      text-decoration: underline;
+    }
+
+    
     @media (max-width: 520px) {
       .topbar {
         padding: 12px 14px;
@@ -155,7 +215,7 @@
   <main>
     <section class="login-card">
       <h1>Accedi</h1>
-      <p class="intro">Inserisci email e password per entrare nel marketplace degli studenti.</p>
+      <p class="intro">Inserisci email e password per iniziare subito ad acquistare e vendere libri di testo.</p>
 
       <form method="post" action="#" autocomplete="on">
         <div class="field">
@@ -164,12 +224,21 @@
         </div>
 
         <div class="field">
-          <label for="password">Password</label>
+          <div class="password-row">
+            <label for="password">Password</label>
+            <a href="#" class="forgot-link">Hai dimenticato la password?</a>
+          </div>
           <input type="password" id="password" name="password" placeholder="Inserisci la tua password" autocomplete="current-password" required>
+        </div>
+        <div class="remember-row">
+          <input type="checkbox" id="remember" name="remember">
+          <label for="remember">Ricordami</label>
         </div>
 
         <button type="submit" class="cta-btn">Entra</button>
+        <p class="register-link">Non hai un account? <a href="registrati.html">Registrati</a></p>
       </form>
+      
 
       <a href="index.html" class="back-link">Torna alla home</a>
     </section>
