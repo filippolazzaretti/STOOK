@@ -194,6 +194,26 @@
       text-decoration: underline;
     }
 
+      .message {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      line-height: 1.5;
+      font-size: 0.94rem;
+      display: none;
+    }
+
+    .message.success {
+      background: #f1f7f1;
+      border: 1px solid #cfe3cf;
+      color: #234023;
+    }
+
+    .message.error {
+      background: #fff2f2;
+      border: 1px solid #ecc9c9;
+      color: #7a1f1f;
+    }
     
     @media (max-width: 520px) {
       .topbar {
@@ -217,7 +237,7 @@
       <h1>Accedi</h1>
       <p class="intro">Inserisci email e password per iniziare subito ad acquistare e vendere libri di testo.</p>
 
-      <form method="post" action="#" autocomplete="on">
+       <form id="login-form" method="post" action="#" autocomplete="on">
         <div class="field">
           <label for="email">Email</label>
           <input type="email" id="email" name="email" placeholder="nome@email.com" autocomplete="username" inputmode="email" required>
@@ -238,10 +258,61 @@
         <button type="submit" class="cta-btn">Entra</button>
         <p class="register-link">Non hai un account? <a href="registrati.html">Registrati</a></p>
       </form>
-      
+       <div id="login-success" class="message success"></div>
+      <div id="login-error" class="message error"></div>
 
       <a href="index.html" class="back-link">Torna alla home</a>
     </section>
   </main>
+      
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://uaelkranbqialxjpoqkk.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhZWxrcmFuYnFpYWx4anBvcWtrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzExMDcsImV4cCI6MjA5MTc0NzEwN30.3RAuhcrAlemr9EpwQsdJRj6xzeS2CH0OxRvQrHVFdns';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const loginForm = document.getElementById('login-form');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const rememberCheckbox = document.getElementById('remember');
+    const loginSuccess = document.getElementById('login-success');
+    const loginError = document.getElementById('login-error');
+    const rememberedEmail = localStorage.getItem('stookRememberedEmail');
+
+    if (rememberedEmail) {
+      emailInput.value = rememberedEmail;
+      rememberCheckbox.checked = true;
+    }
+
+    loginForm.addEventListener('submit', async function (event) {
+      event.preventDefault();
+      loginSuccess.style.display = 'none';
+      loginError.style.display = 'none';
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      if (rememberCheckbox.checked) {
+        localStorage.setItem('stookRememberedEmail', email);
+      } else {
+        localStorage.removeItem('stookRememberedEmail');
+      }
+
+      const { error } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+      if (error) {
+        loginError.textContent = error.message;
+        loginError.style.display = 'block';
+        return;
+      }
+
+      loginSuccess.textContent = 'Accesso effettuato con successo. Il collegamento alla dashboard del marketplace e il prossimo passo.';
+      loginSuccess.style.display = 'block';
+      passwordInput.value = '';
+    });
+  </script>
 </body>
 </html>
