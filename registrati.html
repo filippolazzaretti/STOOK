@@ -74,17 +74,20 @@
     }
 
     .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
       margin-bottom: 18px;
     }
 
     label {
       display: block;
-      margin-bottom: 8px;
       font-weight: 700;
       font-size: 0.96rem;
     }
 
-    input {
+    input,
+    select {
       width: 100%;
       padding: 14px 16px;
       border: 1px solid #d3d3d3;
@@ -96,9 +99,19 @@
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    input:focus {
+    input:focus,
+    select:focus {
       border-color: #000000;
       box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.08);
+    }
+
+    select {
+      appearance: none;
+      background-image: linear-gradient(45deg, transparent 50%, #000000 50%), linear-gradient(135deg, #000000 50%, transparent 50%);
+      background-position: calc(100% - 22px) calc(50% - 3px), calc(100% - 16px) calc(50% - 3px);
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+      cursor: pointer;
     }
 
     .cta-btn {
@@ -140,17 +153,6 @@
       text-decoration: underline;
     }
 
-    .back-link {
-      display: inline-block;
-      margin-top: 18px;
-      color: var(--text);
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .back-link:hover {
-      text-decoration: underline;
-    }
     .message {
       margin-top: 16px;
       padding: 14px 16px;
@@ -171,6 +173,83 @@
       border: 1px solid #ecc9c9;
       color: #7a1f1f;
     }
+
+    .message-hint {
+      margin-top: -4px;
+      margin-bottom: 20px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .preview-card {
+      margin-top: 28px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px 18px;
+    }
+
+    .preview-card h2 {
+      margin: 0 0 8px;
+      font-size: 1.2rem;
+    }
+
+    .preview-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .preview-audience {
+      margin-top: 12px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .preview-list {
+      list-style: none;
+      padding: 0;
+      margin: 18px 0 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .preview-list li {
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #fafafa;
+    }
+
+    .preview-list strong,
+    .preview-list span {
+      display: block;
+    }
+
+    .preview-list strong {
+      margin-bottom: 4px;
+    }
+
+    .preview-list span {
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 0.94rem;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 18px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
     @media (max-width: 520px) {
       .topbar {
         padding: 12px 14px;
@@ -195,20 +274,24 @@
 
       <form id="register-form" method="post" action="#" autocomplete="on">
         <div class="field">
-          <label for="name">Nome e cognome</label>
-          <input type="text" id="name" name="name" placeholder="Inserisci il tuo nome" autocomplete="name" required>
+          <label for="first-name">Nome</label>
+          <input type="text" id="first-name" name="first-name" placeholder="Inserisci il tuo nome" autocomplete="given-name" required>
         </div>
 
-           <label for="phone">Numero di telefono</label>
+        <div class="field">
+          <label for="last-name">Cognome</label>
+          <input type="text" id="last-name" name="last-name" placeholder="Inserisci il tuo cognome" autocomplete="family-name" required>
+        </div>
+
+        <div class="field">
+          <label for="phone">Numero di telefono</label>
           <input type="tel" id="phone" name="phone" placeholder="Inserisci il tuo numero" autocomplete="tel" inputmode="tel" required>
         </div>
 
         <div class="field">
           <label for="university">Ateneo</label>
-          <input type="text" id="university" name="university" placeholder="Inserisci l'ateneo che frequenti" autocomplete="organization" required>
+          <select id="university" name="university" autocomplete="organization" required></select>
         </div>
-
-        <div class="field">
 
         <div class="field">
           <label for="register-email">Email</label>
@@ -220,6 +303,8 @@
           <input type="password" id="register-password" name="password" placeholder="Crea una password" autocomplete="new-password" required>
         </div>
 
+        <p class="message-hint">Tutti i campi nome, cognome, email, numero di telefono e ateneo sono obbligatori.</p>
+
         <button type="submit" class="cta-btn">Crea account</button>
 
         <p class="login-link">Hai gia un account? <a href="accedi.html">Accedi</a></p>
@@ -228,60 +313,19 @@
       <div id="register-success" class="message success"></div>
       <div id="register-error" class="message error"></div>
 
+      <section id="university-preview" class="preview-card" hidden>
+        <h2 id="preview-title"></h2>
+        <p id="preview-text"></p>
+        <p id="preview-audience" class="preview-audience"></p>
+        <ul id="preview-list" class="preview-list"></ul>
+      </section>
+
       <a href="index.html" class="back-link">Torna alla home</a>
     </section>
   </main>
-      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const SUPABASE_URL = 'https://uaelkranbqialxjpoqkk.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhZWxrcmFuYnFpYWx4anBvcWtrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzExMDcsImV4cCI6MjA5MTc0NzEwN30.3RAuhcrAlemr9EpwQsdJRj6xzeS2CH0OxRvQrHVFdns';
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const registerForm = document.getElementById('register-form');
-    const nameInput = document.getElementById('name');
-    const phoneInput = document.getElementById('phone');
-    const universityInput = document.getElementById('university');
-    const registerEmailInput = document.getElementById('register-email');
-    const registerPasswordInput = document.getElementById('register-password');
-    const registerSuccess = document.getElementById('register-success');
-    const registerError = document.getElementById('register-error');
-
-    registerForm.addEventListener('submit', async function (event) {
-      event.preventDefault();
-      registerSuccess.style.display = 'none';
-      registerError.style.display = 'none';
-
-      const fullName = nameInput.value.trim();
-      const phone = phoneInput.value.trim();
-      const university = universityInput.value.trim();
-      const email = registerEmailInput.value.trim();
-      const password = registerPasswordInput.value;
-
-      const emailRedirectTo = window.location.origin + '/accedi.html';
-      const { error } = await supabaseClient.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-          emailRedirectTo: emailRedirectTo,
-          data: {
-            full_name: fullName,
-            phone: phone,
-            university: university
-          }
-        }
-      });
-
-      if (error) {
-        registerError.textContent = error.message;
-        registerError.style.display = 'block';
-        return;
-      }
-
-      registerSuccess.textContent = 'Account creato. Controlla la tua email per confermare la registrazione prima di accedere.';
-      registerSuccess.style.display = 'block';
-      registerForm.reset();
-    });
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="js/register.js"></script>
 </body>
 </html>
 
