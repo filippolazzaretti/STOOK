@@ -199,6 +199,17 @@
           <input type="text" id="name" name="name" placeholder="Inserisci il tuo nome" autocomplete="name" required>
         </div>
 
+           <label for="phone">Numero di telefono</label>
+          <input type="tel" id="phone" name="phone" placeholder="Inserisci il tuo numero" autocomplete="tel" inputmode="tel" required>
+        </div>
+
+        <div class="field">
+          <label for="university">Ateneo</label>
+          <input type="text" id="university" name="university" placeholder="Inserisci l'ateneo che frequenti" autocomplete="organization" required>
+        </div>
+
+        <div class="field">
+
         <div class="field">
           <label for="register-email">Email</label>
           <input type="email" id="register-email" name="email" placeholder="nome@email.com" autocomplete="email" inputmode="email" required>
@@ -228,6 +239,8 @@
 
     const registerForm = document.getElementById('register-form');
     const nameInput = document.getElementById('name');
+    const phoneInput = document.getElementById('phone');
+    const universityInput = document.getElementById('university');
     const registerEmailInput = document.getElementById('register-email');
     const registerPasswordInput = document.getElementById('register-password');
     const registerSuccess = document.getElementById('register-success');
@@ -239,6 +252,8 @@
       registerError.style.display = 'none';
 
       const fullName = nameInput.value.trim();
+      const phone = phoneInput.value.trim();
+      const university = universityInput.value.trim();
       const email = registerEmailInput.value.trim();
       const password = registerPasswordInput.value;
 
@@ -249,7 +264,9 @@
         options: {
           emailRedirectTo: emailRedirectTo,
           data: {
-            full_name: fullName
+            full_name: fullName,
+            phone: phone,
+            university: university
           }
         }
       });
