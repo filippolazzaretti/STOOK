@@ -1,7 +1,7 @@
-import { STORAGE_KEYS, UNIVERSITIES, getUniversityById } from './university-data.js';
+import { STORAGE_KEYS, getUniversityById } from './university-data.js';
 
 const SUPABASE_URL = 'https://uaelkranbqialxjpoqkk.supabase.co';
-const SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhZWxrcmFuYnFpYWx4anBvcWtrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzExMDcsImV4cCI6MjA5MTc0NzEwN30.3RAuhcrAlemr9EpwQsdJRj6xzeS2CH0OxRvQrHVFdns;
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhZWxrcmFuYnFpYWx4anBvcWtrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzExMDcsImV4cCI6MjA5MTc0NzEwN30.3RAuhcrAlemr9EpwQsdJRj6xzeS2CH0OxRvQrHVFdns';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const registerForm = document.getElementById('register-form');
@@ -31,7 +31,6 @@ const requiredFields = [
 initializeRegistrationPage();
 
 function initializeRegistrationPage() {
-  populateUniversityOptions();
   restorePreferredUniversity();
   renderUniversityPreview(universityInput.value);
 
@@ -40,20 +39,6 @@ function initializeRegistrationPage() {
   });
 
   registerForm.addEventListener('submit', handleRegisterSubmit);
-}
-
-function populateUniversityOptions() {
-  const placeholderOption = document.createElement('option');
-  placeholderOption.value = '';
-  placeholderOption.textContent = 'Seleziona il tuo ateneo';
-  universityInput.appendChild(placeholderOption);
-
-  UNIVERSITIES.forEach(function (university) {
-    const option = document.createElement('option');
-    option.value = university.id;
-    option.textContent = university.label;
-    universityInput.appendChild(option);
-  });
 }
 
 function restorePreferredUniversity() {
@@ -277,4 +262,5 @@ function escapeHtml(value) {
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
 }
+
 
