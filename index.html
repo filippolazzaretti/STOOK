@@ -168,6 +168,54 @@
       text-align: left;
     }
 
+    .campus-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 32px 28px;
+      text-align: left;
+    }
+
+    .campus-panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
+    .campus-panel strong {
+      color: var(--text);
+    }
+
+    .campus-list {
+      list-style: none;
+      padding: 0;
+      margin: 26px 0 0;
+      display: grid;
+      gap: 14px;
+    }
+
+    .campus-list li {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .campus-list strong,
+    .campus-list span {
+      display: block;
+    }
+
+    .campus-list strong {
+      margin-bottom: 4px;
+    }
+
+    .campus-list span {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
     .col {
       background: var(--card);
       padding: 34px 28px;
@@ -188,32 +236,21 @@
         min-height: calc(100vh - 92px);
         padding: 24px 18px 56px;
       }
-
-      header h2 {
-        font-size: 1.6rem;
-      }
-
-      header p {
-        font-size: 1.1rem;
-      }
-
+      header h2 { font-size: 1.6rem; }
+      header p { font-size: 1.1rem; }
       .nav-inner {
         padding: 12px;
       }
-
       .cta-container {
         gap: 14px;
       }
-
       #how {
         padding-top: 110px;
       }
-
       section {
         min-height: auto;
         padding: 96px 18px 72px;
       }
-
       .why-grid {
         grid-template-columns: 1fr;
       }
@@ -279,8 +316,18 @@
     </div>
   </section>
 
+  <section id="personalized-campus" hidden>
+    <h2>Annunci per il tuo ateneo</h2>
+    <div class="campus-panel">
+      <p><strong id="campus-name"></strong></p>
+      <p id="campus-description"></p>
+      <ul id="campus-list" class="campus-list"></ul>
+    </div>
+  </section>
+
   <footer>
     <p>© 2025 Stook - Tutti i diritti riservati</p>
   </footer>
+  <script type="module" src="js/home.js"></script>
 </body>
 </html>
