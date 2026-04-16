@@ -107,12 +107,8 @@
 
     select {
       appearance: none;
-      background-image:
-        linear-gradient(45deg, transparent 50%, #000000 50%),
-        linear-gradient(135deg, #000000 50%, transparent 50%);
-      background-position:
-        calc(100% - 22px) calc(50% - 3px),
-        calc(100% - 16px) calc(50% - 3px);
+      background-image: linear-gradient(45deg, transparent 50%, #000000 50%), linear-gradient(135deg, #000000 50%, transparent 50%);
+      background-position: calc(100% - 22px) calc(50% - 3px), calc(100% - 16px) calc(50% - 3px);
       background-size: 6px 6px, 6px 6px;
       background-repeat: no-repeat;
       cursor: pointer;
@@ -138,12 +134,6 @@
     .cta-btn:hover {
       background: #333333;
       transform: translateY(-1px);
-    }
-
-    .cta-btn:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-      transform: none;
     }
 
     .login-link {
@@ -182,6 +172,13 @@
       background: #fff2f2;
       border: 1px solid #ecc9c9;
       color: #7a1f1f;
+    }
+
+    .field-error {
+      min-height: 18px;
+      color: #7a1f1f;
+      font-size: 0.86rem;
+      line-height: 1.4;
     }
 
     .message-hint {
@@ -282,20 +279,23 @@
       <h1>Registrati</h1>
       <p class="intro">Crea il tuo account per iniziare a comprare e vendere libri usati tra studenti.</p>
 
-      <form id="register-form" method="post" action="#" autocomplete="on">
+      <form id="register-form" method="post" action="#" autocomplete="on" novalidate>
         <div class="field">
           <label for="first-name">Nome</label>
           <input type="text" id="first-name" name="first-name" placeholder="Inserisci il tuo nome" autocomplete="given-name" required>
+          <div class="field-error" data-field-error="firstName"></div>
         </div>
 
         <div class="field">
           <label for="last-name">Cognome</label>
           <input type="text" id="last-name" name="last-name" placeholder="Inserisci il tuo cognome" autocomplete="family-name" required>
+          <div class="field-error" data-field-error="lastName"></div>
         </div>
 
         <div class="field">
           <label for="phone">Numero di telefono</label>
           <input type="tel" id="phone" name="phone" placeholder="Inserisci il tuo numero" autocomplete="tel" inputmode="tel" required>
+          <div class="field-error" data-field-error="phone"></div>
         </div>
 
         <div class="field">
@@ -307,16 +307,19 @@
             <option value="trieste">Universita degli Studi di Trieste</option>
             <option value="bologna">Alma Mater Studiorum - Universita di Bologna</option>
           </select>
+          <div class="field-error" data-field-error="university"></div>
         </div>
 
         <div class="field">
           <label for="register-email">Email</label>
           <input type="email" id="register-email" name="email" placeholder="nome@email.com" autocomplete="email" inputmode="email" required>
+          <div class="field-error" data-field-error="email"></div>
         </div>
 
         <div class="field">
           <label for="register-password">Password</label>
           <input type="password" id="register-password" name="password" placeholder="Crea una password" autocomplete="new-password" required>
+          <div class="field-error" data-field-error="password"></div>
         </div>
 
         <p class="message-hint">Tutti i campi nome, cognome, email, numero di telefono e ateneo sono obbligatori.</p>
@@ -344,5 +347,3 @@
   <script type="module" src="js/register.js"></script>
 </body>
 </html>
-
-
