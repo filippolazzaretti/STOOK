@@ -20,13 +20,38 @@ const previewText = document.getElementById('preview-text');
 const previewAudience = document.getElementById('preview-audience');
 const previewList = document.getElementById('preview-list');
 
-const requiredFields = [
-  { key: 'firstName', input: firstNameInput, label: 'nome' },
-  { key: 'lastName', input: lastNameInput, label: 'cognome' },
-  { key: 'email', input: registerEmailInput, label: 'email' },
-  { key: 'phone', input: phoneInput, label: 'numero di telefono' },
-  { key: 'university', input: universityInput, label: 'ateneo' }
-];
+const fieldConfig = {
+  firstName: {
+    input: firstNameInput,
+    label: 'nome',
+    errorNode: document.querySelector('[data-field-error="firstName"]')
+  },
+  lastName: {
+    input: lastNameInput,
+    label: 'cognome',
+    errorNode: document.querySelector('[data-field-error="lastName"]')
+  },
+  phone: {
+    input: phoneInput,
+    label: 'numero di telefono',
+    errorNode: document.querySelector('[data-field-error="phone"]')
+  },
+  university: {
+    input: universityInput,
+    label: 'ateneo',
+    errorNode: document.querySelector('[data-field-error="university"]')
+  },
+  email: {
+    input: registerEmailInput,
+    label: 'email',
+    errorNode: document.querySelector('[data-field-error="email"]')
+  },
+  password: {
+    input: registerPasswordInput,
+    label: 'password',
+    errorNode: document.querySelector('[data-field-error="password"]')
+  }
+};
 
 initializeRegistrationPage();
 
@@ -35,7 +60,15 @@ function initializeRegistrationPage() {
   renderUniversityPreview(universityInput.value);
 
   universityInput.addEventListener('change', function () {
+    clearFieldError('university');
     renderUniversityPreview(universityInput.value);
+  });
+
+  Object.keys(fieldConfig).forEach(function (fieldKey) {
+    const field = fieldConfig[fieldKey];
+    field.input.addEventListener('input', function () {
+      clearFieldError(fieldKey);
+    });
   });
 
   registerForm.addEventListener('submit', handleRegisterSubmit);
@@ -73,13 +106,14 @@ function renderUniversityPreview(universityId) {
 async function handleRegisterSubmit(event) {
   event.preventDefault();
   clearMessages();
+  clearAllFieldErrors();
 
   const formData = getFormData();
-  const validationError = validateRequiredFields(formData) || validateFieldFormats(formData);
+  const validationIssue = validateFormData(formData);
 
-  if (validationError) {
-    showError(validationError);
-    focusInputForError(validationError);
+  if (validationIssue) {
+    showFieldError(validationIssue.field, validationIssue.message);
+    fieldConfig[validationIssue.field].input.focus();
     return;
   }
 
@@ -89,15 +123,16 @@ async function handleRegisterSubmit(event) {
     const duplicateCheck = await checkDuplicates(formData);
 
     if (duplicateCheck.hasDuplicate) {
-      showError(duplicateCheck.message);
-      focusDuplicateField(duplicateCheck.duplicateField);
+      const duplicateField = duplicateCheck.duplicate_field === 'full_name' ? 'firstName' : duplicateCheck.duplicate_field;
+      showFieldError(duplicateField, duplicateCheck.message);
+      fieldConfig[duplicateField].input.focus();
       return;
     }
 
     const signUpResult = await registerUser(formData);
 
     if (signUpResult.error) {
-      showError(mapAuthError(signUpResult.error));
+      handleAuthError(signUpResult.error);
       return;
     }
 
@@ -108,7 +143,8 @@ async function handleRegisterSubmit(event) {
     restorePreferredUniversity();
     renderUniversityPreview(window.localStorage.getItem(STORAGE_KEYS.preferredUniversity));
   } catch (error) {
-    showError(error.message || 'Registrazione non completata. Riprova tra qualche istante.');
+    registerError.textContent = error.message || 'Registrazione non completata. Riprova tra qualche istante.';
+    registerError.style.display = 'block';
   } finally {
     setSubmitting(false);
   }
@@ -125,32 +161,40 @@ function getFormData() {
   };
 }
 
-function validateRequiredFields(formData) {
-  const missingField = requiredFields.find(function (field) {
-    return !formData[field.key];
+function validateFormData(formData) {
+  const requiredFieldKeys = ['firstName', 'lastName', 'email', 'phone', 'university'];
+  const missingFieldKey = requiredFieldKeys.find(function (fieldKey) {
+    return !formData[fieldKey];
   });
 
-  if (!missingField) {
-    return null;
+  if (missingFieldKey) {
+    return {
+      field: missingFieldKey,
+      message: 'Compila il campo obbligatorio: ' + fieldConfig[missingFieldKey].label + '.'
+    };
   }
 
-  return 'Compila il campo obbligatorio: ' + missingField.label + '.';
-}
-
-function validateFieldFormats(formData) {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const phonePattern = /^[+\d\s().-]{7,20}$/;
-
   if (!emailPattern.test(formData.email)) {
-    return "Inserisci un'email valida.";
+    return {
+      field: 'email',
+      message: "Inserisci un'email valida."
+    };
   }
 
+  const phonePattern = /^[+\d\s().-]{7,20}$/;
   if (!phonePattern.test(formData.phone)) {
-    return 'Inserisci un numero di telefono valido.';
+    return {
+      field: 'phone',
+      message: 'Inserisci un numero di telefono valido.'
+    };
   }
 
   if (formData.password.length < 8) {
-    return 'La password deve contenere almeno 8 caratteri.';
+    return {
+      field: 'password',
+      message: 'La password deve contenere almeno 8 caratteri.'
+    };
   }
 
   return null;
@@ -165,7 +209,7 @@ async function checkDuplicates(formData) {
 
   if (error) {
     if (error.message && error.message.includes('check_registration_duplicates')) {
-      throw new Error('Configurazione backend incompleta: applica lo script SQL di registrazione su Supabase prima di usare i controlli duplicati.');
+      throw new Error('Configurazione backend incompleta: aggiorna ed esegui di nuovo lo script SQL di registrazione su Supabase.');
     }
 
     throw new Error('Impossibile verificare i duplicati in questo momento. Riprova tra poco.');
@@ -174,7 +218,7 @@ async function checkDuplicates(formData) {
   if (!data || !Array.isArray(data) || !data[0]) {
     return {
       hasDuplicate: false,
-      duplicateField: null,
+      duplicate_field: null,
       message: ''
     };
   }
@@ -202,39 +246,21 @@ async function registerUser(formData) {
   });
 }
 
-function persistUserPreferences(universityId) {
-  window.localStorage.setItem(STORAGE_KEYS.preferredUniversity, universityId);
-}
-
-function mapAuthError(error) {
+function handleAuthError(error) {
   const message = (error && error.message ? error.message : '').toLowerCase();
 
   if (message.includes('already registered') || message.includes('already been registered')) {
-    return "Questa email e' gia registrata. Accedi oppure reimposta la password.";
-  }
-
-  return error.message || 'Registrazione non completata. Riprova tra poco.';
-}
-
-function focusInputForError(message) {
-  const matchingField = requiredFields.find(function (field) {
-    return message.toLowerCase().includes(field.label);
-  });
-
-  if (matchingField) {
-    matchingField.input.focus();
-  }
-}
-
-function focusDuplicateField(duplicateField) {
-  if (duplicateField === 'email') {
+    showFieldError('email', "Questa email e' gia registrata. Accedi oppure reimposta la password.");
     registerEmailInput.focus();
     return;
   }
 
-  if (duplicateField === 'full_name') {
-    firstNameInput.focus();
-  }
+  registerError.textContent = error.message || 'Registrazione non completata. Riprova tra poco.';
+  registerError.style.display = 'block';
+}
+
+function persistUserPreferences(universityId) {
+  window.localStorage.setItem(STORAGE_KEYS.preferredUniversity, universityId);
 }
 
 function clearMessages() {
@@ -244,9 +270,30 @@ function clearMessages() {
   registerError.textContent = '';
 }
 
-function showError(message) {
-  registerError.textContent = message;
-  registerError.style.display = 'block';
+function showFieldError(fieldKey, message) {
+  const field = fieldConfig[fieldKey];
+
+  if (!field) {
+    registerError.textContent = message;
+    registerError.style.display = 'block';
+    return;
+  }
+
+  field.errorNode.textContent = message;
+}
+
+function clearFieldError(fieldKey) {
+  const field = fieldConfig[fieldKey];
+
+  if (field) {
+    field.errorNode.textContent = '';
+  }
+}
+
+function clearAllFieldErrors() {
+  Object.keys(fieldConfig).forEach(function (fieldKey) {
+    clearFieldError(fieldKey);
+  });
 }
 
 function setSubmitting(isSubmitting) {
@@ -262,5 +309,3 @@ function escapeHtml(value) {
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
 }
-
-
